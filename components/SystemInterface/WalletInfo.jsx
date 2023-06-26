@@ -1,6 +1,8 @@
 import { CircularProgress } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+
+import { w3cwebsocket } from "websocket";
 
 import UseFullContext from "../../lib/useFullContext";
 import { getShortAccount } from "../../lib/getShortAccount";
@@ -9,7 +11,23 @@ export default function WalletInfo({ full }) {
   const context = UseFullContext();
   const { defaultAccount, currentBalance } = context;
 
+  const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState();
+  const [course, setCourse] = useState(0);
+
   if (!defaultAccount) return <CircularProgress />;
+
+  useEffect(() => {
+    const ws = new w3cwebsocket(
+      "wss://stream.binance.com:9443/ws/ethusdt@trade"
+    );
+
+    ws.onmessage = ({ data }) => {
+      const course = Number(JSON.parse(data).p);
+      const balanceInUsd = currentBalance * course;
+      setCurrentBalanceInUsd(String(balanceInUsd).split(".")[0]);
+      setCourse(course);
+    };
+  }, [currentBalance]);
 
   if (full)
     return (
@@ -31,7 +49,13 @@ export default function WalletInfo({ full }) {
         <p>{defaultAccount}</p>
 
         <b style={{ marginTop: "5px" }}>Balance:</b>
-        <p>{currentBalance} ETH</p>
+        <p>
+          {currentBalance} ETH
+          {currentBalanceInUsd && ` / ~${currentBalanceInUsd} USDT`}
+        </p>
+
+        <b style={{ marginTop: "5px" }}>Current course ETH:</b>
+        <p> {course} USDT</p>
       </div>
     );
 
@@ -49,7 +73,7 @@ export default function WalletInfo({ full }) {
         alignItems: "center",
         justifyContent: "center",
 
-        filter: "blur(0.3px)",
+        // filter: "blur(0.3px)",
         opacity: "0.8",
       }}
     >
@@ -58,6 +82,7 @@ export default function WalletInfo({ full }) {
       </div>
       <div>
         <b>Balance:</b> {currentBalance.slice(0, 5)} ETH
+        {currentBalanceInUsd && ` / ~${currentBalanceInUsd} USDT`}
       </div>
     </div>
   );
