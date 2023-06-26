@@ -9,11 +9,14 @@ COPY package-lock.json /package-lock.json
 RUN echo "$PWD"
 WORKDIR /
 RUN echo "$PWD"
-RUN npm install
+RUN npm ci
 
 COPY . /
 RUN echo "$PWD"
 RUN	ls -lh /
 
 WORKDIR /
-ENTRYPOINT [ "npm", "run", "dev"]
+RUN npm run build
+
+WORKDIR /
+ENTRYPOINT [ "npm", "start"]

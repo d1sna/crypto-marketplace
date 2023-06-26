@@ -56,11 +56,11 @@ export default function Navbar() {
             elementName="exchange"
             link="/exchange"
           />
-          <NavBarElement
+          {/* <NavBarElement
             setIsMenuBarOpen={setIsMenuBarOpen}
             elementName="apps"
             link="/apps"
-          />
+          /> */}
         </div>
       )}
 
