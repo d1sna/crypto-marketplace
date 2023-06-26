@@ -1,5 +1,5 @@
 FROM node:16.17.1
-EXPOSE 80
+EXPOSE 8080
 
 RUN echo "$PWD"
 
