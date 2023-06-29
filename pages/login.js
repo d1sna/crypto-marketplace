@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { isFunction } from "lodash";
 
 import Router from "next/router";
@@ -34,6 +34,7 @@ function Login() {
       }}
     >
       <Image
+        alt=""
         style={{
           width: "120px",
           height: "30px",

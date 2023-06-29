@@ -13,49 +13,46 @@ export default function Navbar() {
   const [isMenuBarOpen, setIsMenuBarOpen] = useState(false);
   const [isWalletFull, setIsWalletFull] = useState(false);
 
-  const { defaultAccount } = UseFullContext();
+  const { defaultAccount, checkAndConnectWallet } = UseFullContext();
 
   return (
-    defaultAccount && (
-      <nav className="flex justify-between items-center m-3 rounded-2xl w-full">
-        <Link
-          href="/"
-          onClick={() => {
-            setIsMenuBarOpen(false);
-          }}
-        >
-          <div className="ml-2 p-3 flex justify-center items-center">
-            <Image
-              alt=""
-              style={{ marginRight: "10px" }}
-              height={27}
-              width={27}
-              src={EthIcon}
-            />
-            <h4 className="hidden sm:flex text-purple-500 text-xl">WEB 3.0</h4>
-          </div>
-        </Link>
-
-        <div className="sm:flex hidden">
-          <NavBarElement
-            setIsMenuBarOpen={setIsMenuBarOpen}
-            elementName="main"
-            link="/"
+    <nav className="flex justify-between items-center m-1 px-3 pb-1 w-full border-b-2 border-purple-400 z-50">
+      <Link href="/">
+        <div className="ml-2 p-3 flex justify-center items-center">
+          <Image
+            alt=""
+            style={{ marginRight: "10px" }}
+            height={27}
+            width={27}
+            src={EthIcon}
           />
-          <NavBarElement
-            setIsMenuBarOpen={setIsMenuBarOpen}
-            elementName="exchange"
-            link="/exchange"
-          />
+          <h4 className="hidden sm:flex text-purple-500 text-xl">WEB 3.0</h4>
         </div>
+      </Link>
 
+      {defaultAccount && (
+        <div className="sm:flex hidden">
+          <NavBarElement elementName="main" link="/" />
+          <NavBarElement elementName="exchange" link="/exchange" />
+        </div>
+      )}
+
+      {defaultAccount ? (
         <div
           className="flex items-center justify-center text-sm mr-3"
           // onClick={() => setIsWalletFull(!isWalletFull)}
         >
           <WalletInfo full={isWalletFull} />
         </div>
+      ) : (
+        <Link href="/">
+          <button className="text-white bg-blue-700 hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-2 self-center">
+            Login
+          </button>
+        </Link>
+      )}
 
+      {defaultAccount && (
         <div className="sm:hidden">
           <Link href="/">
             <Button className="text-black text-sm">
@@ -76,7 +73,7 @@ export default function Navbar() {
             </Button>
           </Link>
         </div>
-      </nav>
-    )
+      )}
+    </nav>
   );
 }

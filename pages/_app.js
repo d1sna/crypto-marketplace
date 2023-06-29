@@ -44,7 +44,7 @@ function App({ Component, pageProps }) {
             theme="light"
           />
           <Navbar />
-          <div className="mainBox">
+          <div className="mainBox overflow-auto">
             <Component {...pageProps} />
           </div>
         </UserContext.Provider>

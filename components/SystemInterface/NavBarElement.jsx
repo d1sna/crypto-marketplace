@@ -4,17 +4,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 
-function NavBarElement({ elementName, setIsMenuBarOpen, link }) {
+function NavBarElement({ elementName, link }) {
   const router = useRouter();
 
   return (
     <Button
       onClick={() => {
-        setIsMenuBarOpen(false);
         router.push(link);
       }}
       style={
-        (router.pathname.includes(link) && link !== "/") || (router.pathname === "/" && router.pathname.includes(link))
+        (router.pathname.includes(link) && link !== "/") ||
+        (router.pathname === "/" && router.pathname.includes(link))
           ? {
               marginLeft: "15px",
               marginRight: "15px",
@@ -48,7 +48,6 @@ function NavBarElement({ elementName, setIsMenuBarOpen, link }) {
 
 NavBarElement.propTypes = {
   elementName: PropTypes.string.isRequired,
-  setIsMenuBarOpen: PropTypes.func.isRequired,
   link: PropTypes.string.isRequired,
 };
 
