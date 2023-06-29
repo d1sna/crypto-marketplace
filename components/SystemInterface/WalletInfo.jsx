@@ -2,14 +2,14 @@ import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-import { w3cwebsocket } from "websocket";
+// import { w3cwebsocket } from "websocket";
 
 import UseFullContext from "../../lib/useFullContext";
 import { getShortAccount } from "../../lib/getShortAccount";
 
-export default function WalletInfo({ full }) {
+export default function WalletInfo({ full, className }) {
   const context = UseFullContext();
-  const { defaultAccount, currentBalance } = context;
+  const { defaultAccount, currentBalance = "--" } = context;
 
   const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState();
   const [course, setCourse] = useState("--");
@@ -54,13 +54,13 @@ export default function WalletInfo({ full }) {
 
   return (
     <div
-      className="border-0 rounded-xl p-2 text-sm flex flex-col items-center justify-center"
+      className={`border-0 rounded-xl p-2 text-sm flex flex-col items-center justify-center ${className}`}
       // style={{ boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px" }}
     >
-      <p>
+      <p className="text-center">
         <b>Account:</b> {getShortAccount(defaultAccount)}
       </p>
-      <p>
+      <p className="text-center">
         <b>Balance:</b> {currentBalance.slice(0, 5)} ETH
         {currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}
       </p>

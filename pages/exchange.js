@@ -7,12 +7,14 @@ import { toast } from "react-toastify";
 import TailwindInput from "../components/SystemInterface/TailwindInput";
 
 function Exchange() {
-  const { tokenContract, defaultAccount, signer } = UseFullContext();
+  const { tokenContract, defaultAccount, signer, getBalance } =
+    UseFullContext();
 
   const [balanceToken, setBalanceToken] = useState(null);
   const [tnfAmount, setTnfAmount] = useState();
   const [tnfAddressTo, setTnfAddressTo] = useState();
   const [pending, setPending] = useState(false);
+  const [manualFetchBalance, setManualFetchBalance] = useState(false);
 
   useEffect(() => {
     const getTokenBalance = async () => {
@@ -26,7 +28,8 @@ function Exchange() {
     };
 
     if (tokenContract) getTokenBalance();
-  }, [defaultAccount, tokenContract]);
+    setManualFetchBalance(false);
+  }, [defaultAccount, tokenContract, manualFetchBalance]);
 
   const sendTokenToAddress = async () => {
     setPending(true);
@@ -48,6 +51,7 @@ function Exchange() {
 
       setTnfAmount("");
       setTnfAddressTo("");
+      manualFetchBalance(true);
     } catch (error) {
       console.log({ error });
       toast.error("Error while transfer token :(");
@@ -67,7 +71,7 @@ function Exchange() {
       });
 
       toast.warn(`Transaction pending... Hash:${tx.hash}`, {
-        autoClose: 5000 * 100,
+        autoClose: 5000,
       });
       await tx.wait();
 
@@ -76,9 +80,11 @@ function Exchange() {
       amount : ${tnfAmount} TNF `);
 
       setTnfAmount("");
+      setManualFetchBalance(true);
+      await getBalance(defaultAccount);
     } catch (error) {
       console.log({ error });
-      toast.error("Error while deposit token :(");
+      toast.error("Error while deposit token");
     }
 
     setPending(false);

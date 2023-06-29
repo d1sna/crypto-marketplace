@@ -28,7 +28,7 @@ function App({ Component, pageProps }) {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center w-full items-center font-mono">
+    <div className="flex flex-col justify-center w-full items-center font-mono px-8">
       <EthProvider>
         <UserContext.Provider value={context}>
           <ToastContainer
