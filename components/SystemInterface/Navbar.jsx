@@ -22,26 +22,23 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="navBar">
+    <nav className="flex justify-between items-center m-3 rounded-2xl border-b-2 border-b-red-400 w-full">
       <Link
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
         href="/"
         onClick={() => {
           setIsMenuBarOpen(false);
         }}
       >
-        <Image
-          alt=""
-          style={{ marginRight: "10px" }}
-          height={27}
-          width={27}
-          src={EthIcon}
-        />
-        {windowWidth > 800 && <h4>WEB 3.0</h4>}
+        <div className="m-2 pl-2 border-2 border-red-400 flex justify-center items-center">
+          <Image
+            alt=""
+            style={{ marginRight: "10px" }}
+            height={27}
+            width={27}
+            src={EthIcon}
+          />
+          {windowWidth > 800 && <h4>WEB 3.0</h4>}
+        </div>
       </Link>
 
       {defaultAccount && !isMenuBarOpen && windowWidth > 800 && (
@@ -74,7 +71,20 @@ export default function Navbar() {
 
       {windowWidth < 800 && (
         <Button style={{ color: "black" }}>
-          <DensityMediumIcon />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-2 h-2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
         </Button>
       )}
     </nav>

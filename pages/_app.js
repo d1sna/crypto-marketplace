@@ -30,7 +30,7 @@ function App({ Component, pageProps }) {
       <EthProvider>
         <UserContext.Provider value={context}>
           <ToastContainer
-            position="top-left"
+            position="bottom"
             autoClose={2500}
             hideProgressBar
             newestOnTop

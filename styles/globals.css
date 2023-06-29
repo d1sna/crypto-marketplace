@@ -91,24 +91,9 @@ code {
   backdrop-filter: opacity(0.5);
 }
 
-.navBar {
-  position: relative;
-  top: 0px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 15px;
-  border-radius: 15px;
-  width: 90vw;
-  height: 7vh;
-  minheight: 50px;
-  padding: 30px;
-  filter: blur(0.3px);
-  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
-  color: black;
-  backdrop-filter: opacity(0.5);
-}
+/* .navBar {
+  @apply (flex fl);
+} */
 
 .navBarElements {
   display: flex;
@@ -116,96 +101,19 @@ code {
   justify-content: flex-end;
 }
 
-.gameColumn {
-  padding: 0;
-  /* margin: 10px; */
-  list-style: none;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  flex-direction: column;
-  -webkit-flex-flow: column;
-  justify-content: space-around;
-  /* line-height: 30px; */
-  animation-timing-function: ease-in;
-  position: relative;
-  /* animation: spin 5s infinite; */
-}
-
-@keyframes spin {
-  from {
-    top: -50px;
-    opacity: 0;
-  }
-  to {
-    top: 50px;
-    opacity: 1;
-  }
-}
-
-.gameItem {
-  border-radius: 25px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  transition: all 500ms ease-in-out;
-  width: 8vw;
-  height: 11vh;
-  margin-top: 5px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  filter: blur(0.3px);
-  opacity: 0.8;
-}
-
-.gameCanvas {
-  display: flex;
-}
-
-.gameBox {
-  width: 70vw;
-  height: 70wh;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  margin: 15px;
-  border: 0px solid grey;
-  border-radius: 15px;
-  height: 70%;
-  padding: 10%;
-  filter: blur(0.3px);
-  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
-  padding-top: 30px;
-  padding-bottom: 20px;
-  /* background-color: white; */
-  /* color: black; */
-  backdrop-filter: blur(20px);
-  filter: blur(1px);
-}
-
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  /* border: 0.1px solid grey; */
   border-radius: 15px;
-  /* filter: blur(0.3px); */
   box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
   padding: 15px;
   margin: 5px;
-  /* background: rgba(255, 255, 255, 0.9); */
-  /* filter: "blur(0.3px)"; */
   backdrop-filter: blur(2px);
 }
 
 body {
-  /* background-image: url("../public/ether_background.jpeg"); */
   filter: blur(10px);
   z-index: "-999";
   -webkit-filter: blur(0.1px);
@@ -214,6 +122,4 @@ body {
   background-size: 100vw 110vh;
   height: 100%;
   backdrop-filter: blur(5px) brightness(90%) contrast(110%);
-  /* color: white; */
-  /* background-color: #292929; */
 }
