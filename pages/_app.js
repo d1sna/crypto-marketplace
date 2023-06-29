@@ -18,23 +18,20 @@ function App({ Component, pageProps }) {
     });
 
   useEffect(() => {
-    setContext({ accounts: null, token: sessionStorage.getItem("token"), updateUserContext });
+    setContext({
+      accounts: null,
+      token: sessionStorage.getItem("token"),
+      updateUserContext,
+    });
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className="flex flex-col justify-center w-full items-center font-mono">
       <EthProvider>
         <UserContext.Provider value={context}>
           <ToastContainer
             position="top-left"
-            autoClose={500}
+            autoClose={2500}
             hideProgressBar
             newestOnTop
             closeOnClick

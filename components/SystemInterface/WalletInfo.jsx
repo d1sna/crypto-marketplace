@@ -12,30 +12,32 @@ export default function WalletInfo({ full }) {
   const { defaultAccount, currentBalance } = context;
 
   const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState();
-  const [course, setCourse] = useState(0);
+  const [course, setCourse] = useState("--");
 
   if (!defaultAccount) return <CircularProgress />;
 
   useEffect(() => {
-    const ws = new w3cwebsocket(
-      "wss://stream.binance.com:9443/ws/ethusdt@trade"
-    );
+    try {
+      const ws = new w3cwebsocket(
+        "wss://stream.binance.com:9443/ws/ethusdt@trade"
+      );
 
-    ws.onmessage = ({ data }) => {
-      const course = Number(JSON.parse(data).p);
-      const balanceInUsd = currentBalance * course;
-      setCurrentBalanceInUsd(String(balanceInUsd).split(".")[0]);
-      setCourse(course);
-    };
-  }, [currentBalance]);
+      ws.onmessage = ({ data }) => {
+        const course = Number(JSON.parse(data).p);
+        const balanceInUsd = currentBalance * course;
+        setCurrentBalanceInUsd(String(balanceInUsd).split(".")[0]);
+        setCourse(course);
+      };
+    } catch (error) {
+      console.log("Error while getting course: ", error.message);
+    }
+  });
 
   if (full)
     return (
       <div
         style={{
           textDecoration: "none",
-          border: "0.0px solid grey",
-          borderRadius: "15px",
           boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px",
           padding: "10px",
           fontSize: "12px",
@@ -51,7 +53,7 @@ export default function WalletInfo({ full }) {
         <b style={{ marginTop: "5px" }}>Balance:</b>
         <p>
           {currentBalance} ETH
-          {currentBalanceInUsd && ` / ~${currentBalanceInUsd} USDT`}
+          {currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}
         </p>
 
         <b style={{ marginTop: "5px" }}>Current course ETH:</b>
@@ -61,6 +63,7 @@ export default function WalletInfo({ full }) {
 
   return (
     <div
+      className="border-2 border-gray-500 rounded-md shadow-md bg-gray-200 p-2 text-sm flex flex-col items-center justify-center"
       style={{
         textDecoration: "none",
         borderRadius: "15px",
@@ -72,9 +75,6 @@ export default function WalletInfo({ full }) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-
-        // filter: "blur(0.3px)",
-        opacity: "0.8",
       }}
     >
       <div>
@@ -82,7 +82,7 @@ export default function WalletInfo({ full }) {
       </div>
       <div>
         <b>Balance:</b> {currentBalance.slice(0, 5)} ETH
-        {currentBalanceInUsd && ` / ~${currentBalanceInUsd} USDT`}
+        {currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}
       </div>
     </div>
   );

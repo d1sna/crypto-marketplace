@@ -3,7 +3,7 @@ import React from "react";
 
 // settings.propTypes = {};
 
-function settings() {
+function Settings() {
   return (
     <div className="container" style={{ padding: "10px" }}>
       User settings
