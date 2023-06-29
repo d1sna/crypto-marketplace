@@ -2,6 +2,8 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../components/SystemInterface/Navbar";
 
 import { EthProvider } from "../lib/ethContext";
@@ -30,16 +32,16 @@ function App({ Component, pageProps }) {
       <EthProvider>
         <UserContext.Provider value={context}>
           <ToastContainer
-            position="bottom"
+            position="top-right"
             autoClose={2500}
-            hideProgressBar
+            // hideProgressBar
             newestOnTop
             closeOnClick
             rtl={false}
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme="colored"
+            theme="light"
           />
           <Navbar />
           <div className="mainBox">

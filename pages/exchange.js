@@ -3,7 +3,7 @@ import WithConnectedWallet from "../components/SystemInterface/WithConnectedWall
 import UseFullContext from "../lib/useFullContext";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 import TailwindInput from "../components/SystemInterface/TailwindInput";
 
 function Exchange() {
@@ -96,7 +96,7 @@ function Exchange() {
           </p>
         </div>
 
-        <div className="flex">
+        <div className="flex md:flex-row flex-col">
           <div className="container flex justify-around flex-col p-3 m-1">
             <p className="mb-2 flex flex-col justify-center text-xl font-bold items-center">
               Transfer

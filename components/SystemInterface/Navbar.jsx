@@ -1,35 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import DensityMediumIcon from "@mui/icons-material/DensityMedium";
 
 import Image from "next/image";
 import UseFullContext from "../../lib/useFullContext";
 import NavBarElement from "./NavBarElement";
 import WalletInfo from "./WalletInfo";
-// import MenuBar from "./MenuBar";
-// import AppsIcon from "@mui/icons-material/Apps";
 
 import EthIcon from "../../public/ethereum.png";
 import { Button } from "@mui/material";
 
 export default function Navbar() {
   const [isMenuBarOpen, setIsMenuBarOpen] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(0);
+  const [isWalletFull, setIsWalletFull] = useState(false);
+
   const { defaultAccount } = UseFullContext();
 
-  useEffect(() => {
-    setWindowWidth(window.screen.width);
-  }, []);
-
   return (
-    <nav className="flex justify-between items-center m-3 rounded-2xl border-b-2 border-b-red-400 w-full">
+    <nav className="flex justify-between items-center m-3 rounded-2xl w-full">
       <Link
         href="/"
         onClick={() => {
           setIsMenuBarOpen(false);
         }}
       >
-        <div className="m-2 pl-2 border-2 border-red-400 flex justify-center items-center">
+        <div className="ml-2 p-3 flex justify-center items-center">
           <Image
             alt=""
             style={{ marginRight: "10px" }}
@@ -37,12 +31,12 @@ export default function Navbar() {
             width={27}
             src={EthIcon}
           />
-          {windowWidth > 800 && <h4>WEB 3.0</h4>}
+          <h4 className="hidden sm:flex">WEB 3.0</h4>
         </div>
       </Link>
 
-      {defaultAccount && !isMenuBarOpen && windowWidth > 800 && (
-        <div className="navBarElements">
+      {defaultAccount && (
+        <div className="sm:flex hidden">
           <NavBarElement
             setIsMenuBarOpen={setIsMenuBarOpen}
             elementName="main"
@@ -58,35 +52,33 @@ export default function Navbar() {
 
       {defaultAccount && (
         <div
-          style={{
-            display: "flex",
-            alignContent: "center",
-            alignItems: "center",
-          }}
+          className="flex items-center justify-center text-sm"
+          // onClick={() => setIsWalletFull(!isWalletFull)}
         >
-          <WalletInfo full={false} />
-          {/* <MenuBar setIsMenuBarOpen={setIsMenuBarOpen} isMenuBarOpen={isMenuBarOpen} /> */}
+          <WalletInfo full={isWalletFull} />
         </div>
       )}
 
-      {windowWidth < 800 && (
-        <Button style={{ color: "black" }}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-2 h-2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-            />
-          </svg>
-        </Button>
-      )}
+      <div className="sm:hidden">
+        <Link href="/">
+          <Button className="text-black text-sm">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-7 h-7"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </Button>
+        </Link>
+      </div>
     </nav>
   );
 }

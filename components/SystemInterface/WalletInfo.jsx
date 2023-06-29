@@ -36,46 +36,27 @@ export default function WalletInfo({ full }) {
   if (full)
     return (
       <div
-        style={{
-          textDecoration: "none",
-          boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px",
-          padding: "10px",
-          fontSize: "12px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        className="flex flex-col justify-center items-center border-0 rounded-xl text-sm"
+        style={{ boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px" }}
       >
-        <b style={{ marginTop: "5px" }}>Account:</b>
+        <b className="mt-1">Account:</b>
         <p>{defaultAccount}</p>
 
-        <b style={{ marginTop: "5px" }}>Balance:</b>
+        <b className="mt-1">Balance:</b>
         <p>
           {currentBalance} ETH
           {currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}
         </p>
 
-        <b style={{ marginTop: "5px" }}>Current course ETH:</b>
+        <b className="mt-1">Current course ETH:</b>
         <p> {course} USDT</p>
       </div>
     );
 
   return (
     <div
-      className="border-2 border-gray-500 rounded-md shadow-md bg-gray-200 p-2 text-sm flex flex-col items-center justify-center"
-      style={{
-        textDecoration: "none",
-        borderRadius: "15px",
-        boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px",
-        padding: "10px",
-        fontSize: "10px",
-        height: "6vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+      className="border-0 rounded-xl p-2 text-sm flex flex-col items-center justify-center"
+      style={{ boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px" }}
     >
       <div>
         <b>Account:</b> {getShortAccount(defaultAccount)}

@@ -91,16 +91,6 @@ code {
   backdrop-filter: opacity(0.5);
 }
 
-/* .navBar {
-  @apply (flex fl);
-} */
-
-.navBarElements {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
 .container {
   display: flex;
   justify-content: center;
