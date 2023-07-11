@@ -5,15 +5,15 @@ import { ethers } from "ethers";
 import { toast } from "react-toastify";
 
 import TailwindInput from "../components/SystemInterface/TailwindInput";
+import { getShortAccount } from "../lib/getShortAccount";
 
 function Exchange() {
-  const { tokenContract, defaultAccount, signer, getBalance } =
-    UseFullContext();
+  const { tokenContract, defaultAccount, signer } = UseFullContext();
 
   const [balanceToken, setBalanceToken] = useState(null);
-  const [tnfAmount, setTnfAmount] = useState();
+  const [tnfTransferAmount, setTransferTnfAmount] = useState();
+  const [tnfDepositAmount, setTnfDepositAmount] = useState();
   const [tnfAddressTo, setTnfAddressTo] = useState();
-  const [pending, setPending] = useState(false);
   const [manualFetchBalance, setManualFetchBalance] = useState(false);
 
   useEffect(() => {
@@ -32,62 +32,56 @@ function Exchange() {
   }, [defaultAccount, tokenContract, manualFetchBalance]);
 
   const sendTokenToAddress = async () => {
-    setPending(true);
-
     try {
-      const amount = ethers.utils.parseEther(tnfAmount);
+      const amount = ethers.utils.parseEther(tnfTransferAmount);
       const tx = await tokenContract
         .connect(signer)
         .transfer(tnfAddressTo, amount, {
           gasLimit: 70000,
         });
 
-      toast.warn(`Transaction pending... Hash:${tx.hash}`);
+      toast.warn(`Transaction pending... Hash:${tx.hash}`, {
+        autoClose: 10000,
+      });
       await tx.wait();
 
-      toast.success(`Transaction successful: 
-      type : send
-      amount : ${tnfAmount} TNF `);
+      toast.success(
+        `Transaction successful: ${tnfTransferAmount} TNF sent to ${getShortAccount(
+          tnfAddressTo
+        )}`
+      );
 
-      setTnfAmount("");
+      setTransferTnfAmount("");
       setTnfAddressTo("");
-      manualFetchBalance(true);
+      setManualFetchBalance(true);
     } catch (error) {
-      console.log({ error });
       toast.error("Error while transfer token :(");
+      console.log({ error });
     }
-
-    setPending(false);
   };
 
   const buyTokenForEth = async () => {
-    setPending(true);
-
     try {
-      const amount = ethers.utils.parseEther(tnfAmount);
+      const amount = ethers.utils.parseEther(tnfDepositAmount);
       const tx = await tokenContract.connect(signer).deposit({
         value: amount,
         gasLimit: 70000,
       });
 
       toast.warn(`Transaction pending... Hash:${tx.hash}`, {
-        autoClose: 5000,
+        autoClose: 10000,
       });
       await tx.wait();
 
       toast.success(`Transaction successful: 
-      type : buy
-      amount : ${tnfAmount} TNF `);
+      bought ${tnfDepositAmount} TNF `);
 
-      setTnfAmount("");
+      setTnfDepositAmount("");
       setManualFetchBalance(true);
-      await getBalance(defaultAccount);
     } catch (error) {
-      console.log({ error });
       toast.error("Error while deposit token");
+      console.log({ error });
     }
-
-    setPending(false);
   };
 
   return (
@@ -102,7 +96,7 @@ function Exchange() {
           </p>
         </div>
 
-        <div className="flex md:flex-row flex-col">
+        <div className="flex md:flex-row flex-col md:w-full">
           <div className="container flex justify-between flex-col p-3 m-1">
             <p className="mb-2 flex flex-col justify-center text-xl font-bold items-center">
               Transfer
@@ -121,7 +115,8 @@ function Exchange() {
                 label="Amount"
                 id="send_amount"
                 placeholder="0.01"
-                onChange={(e) => setTnfAmount(e.target.value)}
+                isNumbersOnly
+                onChange={(e) => setTransferTnfAmount(e.target.value)}
               />
             </div>
             <button
@@ -142,7 +137,8 @@ function Exchange() {
                 label="Amount"
                 id="deposit_amount"
                 placeholder="0.01"
-                onChange={(e) => setTnfAmount(e.target.value)}
+                isNumbersOnly
+                onChange={(e) => setTnfDepositAmount(e.target.value)}
               />
             </div>
             <button
@@ -161,8 +157,9 @@ function Exchange() {
             <div className="m-2">
               <TailwindInput
                 label="Amount"
-                id="deposit_amount"
+                id="withdrawal_amount"
                 placeholder="0.01"
+                isNumbersOnly
                 onChange={(e) => setTnfAmount(e.target.value)}
               />
             </div>

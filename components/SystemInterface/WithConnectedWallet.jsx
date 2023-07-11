@@ -8,8 +8,7 @@ function WithConnectedWallet(Component) {
     const router = useRouter();
 
     useEffect(() => {
-      if (!defaultAccount) Router.push("/login");
-      if (router.asPath === "/login" && defaultAccount) Router.push("/");
+      if (!defaultAccount && router.asPath !== "/") Router.push("/");
     }, [defaultAccount, router.asPath]);
 
     return <Component />;
