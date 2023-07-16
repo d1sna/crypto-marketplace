@@ -8,26 +8,51 @@ import WalletInfo from "./WalletInfo";
 
 import EthIcon from "../../public/ethereum.png";
 import MetamaskInstallButton from "./MetamaskInstallButton";
+import { Button } from "@mui/material";
 
 export default function Navbar() {
   const { defaultAccount } = UseFullContext();
 
   return (
-    <nav className="flex justify-between items-center m-1 px-3 pb-1 w-full border-b-2 border-red-400 z-50">
-      <Link href="/">
-        <div className="ml-2 p-3 flex justify-center items-center">
-          <Image
-            alt=""
-            style={{ marginRight: "10px" }}
-            height={27}
-            width={27}
-            src={EthIcon}
-          />
-          <h4 className="hidden sm:flex text-purple-400 text-xl">WEB 3.0</h4>
+    <nav className="flex flex-row justify-between items-center w-full border-b-2 border-purple-400 z-50 my-1">
+      <div className="flex">
+        <Link href="/">
+          <div className="flex items-center justify-center">
+            <Image
+              alt=""
+              style={{ marginRight: "10px" }}
+              height={27}
+              width={27}
+              src={EthIcon}
+            />
+            <h4 className="hidden sm:flex text-purple-400 text-xl">WEB 3.0</h4>
+          </div>
+        </Link>
+      </div>
+      {/* {defaultAccount && (
+        <div className="flex justify-around items-center mx-2">
+          <Link
+            href={"/"}
+            className="mx-2 uppercase text-white bg-red-400 rounded-md p-2 hover:border-2 border-purple-400"
+          >
+            main
+          </Link>
+          <Link
+            href={"/exchange"}
+            className="mx-2 uppercase text-white bg-red-400 rounded-md p-2 hover:border-2 border-purple-400"
+          >
+            exchange
+          </Link>
+          <Link
+            href={"/play"}
+            className="mx-2 uppercase text-white bg-red-400 rounded-md p-2 hover:border-2 border-purple-400"
+          >
+            play
+          </Link>
         </div>
-      </Link>
+      )} */}
       {defaultAccount && (
-        <div className="sm:flex hidden">
+        <div className="sm:flex hidden items-center justify-center w-full self-center">
           <NavBarElement elementName="main" link="/" />
           <NavBarElement elementName="exchange" link="/exchange" />
           <NavBarElement elementName="play" link="/play" />
@@ -37,21 +62,6 @@ export default function Navbar() {
         <div className="flex justify-end text-sm mr-3 w-full items-center">
           <WalletInfo className="text-xs" full={false} />
           <div className="flex">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6 mr-3"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"
-              />
-            </svg>
-
             {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -74,7 +84,7 @@ export default function Navbar() {
 
       {defaultAccount && (
         <div className="sm:hidden">
-          {/* <Link href="/">
+          <Link href="/">
             <Button className="text-black text-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +101,7 @@ export default function Navbar() {
                 />
               </svg>
             </Button>
-          </Link> */}
+          </Link>
         </div>
       )}
     </nav>
