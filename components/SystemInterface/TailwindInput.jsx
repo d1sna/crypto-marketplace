@@ -7,20 +7,21 @@ export default function TailwindInput({
   id,
   label,
   placeholder,
-  onChange,
+  onChange = () => {},
   isNumbersOnly = false,
   value,
+  className,
 }) {
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
   return (
-    <div>
+    <div className={className}>
       <label
         htmlFor={id}
         className={`${
           !isValid && "text-red-600"
-        } block text-sm font-medium text-gray-900 dark:text-white pt-2`}
+        } block text-smxl font-medium text-white pt-2 `}
       >
         {label}
       </label>
@@ -48,14 +49,14 @@ export default function TailwindInput({
         value={value}
         className={`${
           !isValid && "border-b-2 border-red-400"
-        } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 p-1`}
+        } bg-gray-50 border border-gray-300 text-gray-900 text-smxl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 p-2`}
         placeholder={placeholder}
         required
       />
       <div
         className={`${
           !errorMessage && "text-slate-400 opacity-0"
-        } text-red-400 text-xs pt-1 relative`}
+        } text-red-400 text-smxl pt-1 relative`}
       >
         {errorMessage || "Correct value"}
       </div>

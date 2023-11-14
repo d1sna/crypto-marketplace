@@ -3,9 +3,9 @@
 @tailwind utilities;
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: linear-gradient(0deg, #060522  30%, #061434);
+    --background-start-rgb: linear-gradient(0deg, #060522  30%, #061434)
+    --background-end-rgb: linear-gradient(0deg, #060522  30%, #061434)
 
     --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(
@@ -26,11 +26,17 @@
       #ffffff10,
       #ffffff80
     );
-
     --callout-rgb: 20, 20, 20;
     --callout-border-rgb: 108, 108, 108;
     --card-rgb: 100, 100, 100;
     --card-border-rgb: 200, 200, 200;
+  }
+}
+
+
+@layer base {
+  html {
+    font-family: "Proxima Nova", system-ui, sans-serif;
   }
 }
 
@@ -44,17 +50,24 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  position: fixed;
+  filter: blur(10px);
+  z-index: "-999";
+  -webkit-filter: blur(0.1px);
+  background-position: center;
+  background-repeat: "reapeat";
+  background-size: 100vw 110vh;
+  height: 100%;
+  backdrop-filter: blur(5px) brightness(90%) contrast(110%);
+  font-family: Play;
+  background: linear-gradient(0deg, #060522  30%, #061434);
+  background-size: cover;
+  background-attachment: fixed; /* Опционально, чтобы фон оставался неподвижным при прокрутке */
+  background-position: center;
+  margin: 0;
+  padding: 0;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
 
 a {
   color: inherit;
@@ -67,14 +80,8 @@ a {
   }
 }
 
-body {
-  margin: 0;
-  /* font-family: "Muli", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
-  /* display: "flex";
-  justify-content: "center"; */
-}
+
+ 
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
@@ -84,6 +91,7 @@ code {
 .mainBox {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   margin: 3px;
   width: 90vw;
   height: 90vh;
@@ -98,15 +106,4 @@ code {
   padding: 15px;
   margin: 5px;
   backdrop-filter: blur(2px);
-}
-
-body {
-  filter: blur(10px);
-  z-index: "-999";
-  -webkit-filter: blur(0.1px);
-  background-position: center;
-  background-repeat: "reapeat";
-  background-size: 100vw 110vh;
-  height: 100%;
-  backdrop-filter: blur(5px) brightness(90%) contrast(110%);
 }

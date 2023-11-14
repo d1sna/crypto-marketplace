@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import PropTypes from "prop-types";
 import React from "react";
 import { ToastContainer } from "react-toastify";
@@ -8,19 +7,11 @@ import Navbar from "../components/SystemInterface/Navbar";
 
 import "../styles/globals.css";
 import { EthProvider } from "../lib/ethContext";
-
-const contextClass = {
-  success: "bg-blue-400",
-  error: "bg-red-400",
-  info: "bg-gray-400",
-  warning: "bg-orange-400",
-  default: "bg-indigo-400",
-  dark: "bg-white-400 font-gray-300",
-};
+import Footer from "../components/SystemInterface/Footer";
 
 function App({ Component, pageProps }) {
   return (
-    <div className="flex flex-col justify-center w-full items-center font-mono px-8">
+    <div className="flex flex-col justify-center w-full items-center text-white px-8">
       <EthProvider>
         <ToastContainer
           autoClose={2500}
@@ -31,17 +22,17 @@ function App({ Component, pageProps }) {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          toastClassName={({ type }) =>
-            contextClass[type || "default"] +
-            " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer rounded-2xl my-1"
+          toastClassName={() =>
+            `relative flex p-2 m-2 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer my-1 backdrop-blur-3xl border border-gray-800 rounded-xl shadow-md bg-gray-900 bg-opacity-10`
           }
-          bodyClassName={() => "font-mono text-sm flex p-1 "}
-          position="bottom-center"
+          bodyClassName={() => "text-smxl flex m-2 p-2 bg-opacity-10"}
+          position="bottom-right"
         />
         <Navbar />
-        <div className="mainBox overflow-auto">
+        <div className="mainBox overflow-auto h-screen">
           <Component {...pageProps} />
         </div>
+        <Footer />
       </EthProvider>
     </div>
   );

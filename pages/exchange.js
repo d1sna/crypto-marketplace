@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import TailwindInput from "../components/SystemInterface/TailwindInput";
 import { getShortAccount } from "../lib/getShortAccount";
 
+import { w3cwebsocket } from "websocket";
+
 function Exchange() {
   const { tokenContract, defaultAccount, signer } = UseFullContext();
 
@@ -15,6 +17,24 @@ function Exchange() {
   const [tnfDepositAmount, setTnfDepositAmount] = useState();
   const [tnfAddressTo, setTnfAddressTo] = useState();
   const [manualFetchBalance, setManualFetchBalance] = useState(false);
+
+  const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState(null);
+
+  useEffect(() => {
+    try {
+      const ws = new w3cwebsocket(
+        "wss://stream.binance.com:9443/ws/ethusdt@trade"
+      );
+      ws.onmessage = ({ data }) => {
+        const course = Number(JSON.parse(data).p);
+        const balanceInUsd = balanceToken * course;
+        if (balanceInUsd > 0) setCurrentBalanceInUsd(balanceInUsd.toFixed(2));
+        // setCourse(course);
+      };
+    } catch (error) {
+      console.log("Error while getting course: ", error.message);
+    }
+  });
 
   useEffect(() => {
     const getTokenBalance = async () => {
@@ -79,25 +99,28 @@ function Exchange() {
       setTnfDepositAmount("");
       setManualFetchBalance(true);
     } catch (error) {
-      toast.error("Error while deposit token");
+      toast.error(`Error while deposit token: ${error.message}`);
       console.log({ error });
     }
   };
 
   return (
     tokenContract && (
-      <div className="flex items-center justify-center flex-col p-2 w-full h-auto">
-        <div className="flex justify-center flex-col items-center mb-3">
-          <p className=" mb-2 flex justify-center text-xl font-bold ">
-            Your balance
+      <div className="flex flex-col justify-center items-center p-2 w-full">
+        <div className="w-full sm:w-[20%] bg-gray-800 flex flex-col justify-center items-center rounded-md p-1 text-sm">
+          <p className="mb-2 flex justify-center font-bold ">
+            💰 Current balance
           </p>
-          <p className=" font-bold border-b-2 border-red-400">
-            {balanceToken} TNF
+          <p className="font-bold text-emerald-100">{balanceToken} TNF</p>
+          <p className="my-2 text-emerald-100">
+            {currentBalanceInUsd
+              ? `  💵 ~ ${currentBalanceInUsd} $ `
+              : "  💵 ...waiting course $"}
           </p>
         </div>
 
-        <div className="flex md:flex-row flex-col md:w-full">
-          <div className="container flex justify-between flex-col p-3 m-1">
+        <div className="flex md:flex-row flex-col">
+          {/* <div className="container flex justify-between flex-col p-3 m-1">
             <p className="mb-2 flex flex-col justify-center text-xl font-bold items-center">
               Transfer
             </p>
@@ -125,14 +148,14 @@ function Exchange() {
             >
               Send
             </button>
-          </div>
+          </div> */}
 
-          <div className="container flex flex-col p-1 m-1 justify-between">
+          <div className="flex flex-col rounded-md mt-4 p-5 border border-gray-800 bg-gray-800">
             <div className=" mb-2 flex justify-center text-xl font-bold">
               Deposit
             </div>
 
-            <div className="m-2">
+            <div className="m-2 ">
               <TailwindInput
                 label="Amount"
                 id="deposit_amount"
@@ -149,7 +172,7 @@ function Exchange() {
             </button>
           </div>
 
-          <div className="container flex flex-col p-1 m-1 justify-between">
+          {/* <div className="container flex flex-col p-1 m-1 justify-between">
             <div className=" mb-2 flex justify-center text-xl font-bold">
               Withdrawal
             </div>
@@ -169,7 +192,7 @@ function Exchange() {
             >
               Sell
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     )

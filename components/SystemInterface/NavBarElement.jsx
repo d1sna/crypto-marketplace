@@ -6,40 +6,18 @@ import { useRouter } from "next/router";
 
 function NavBarElement({ elementName, link }) {
   const router = useRouter();
+  const isCurrentPage =
+    (router.pathname.includes(link) && link !== "/") ||
+    (router.pathname === "/" && router.pathname.includes(link));
 
   return (
     <Button
       onClick={() => {
         router.push(link);
       }}
-      style={
-        (router.pathname.includes(link) && link !== "/") ||
-        (router.pathname === "/" && router.pathname.includes(link))
-          ? {
-              marginLeft: "15px",
-              marginRight: "15px",
-              marginTop: "5px",
-              marginBottom: "5px",
-              borderRadius: "15px",
-              padding: "10px",
-              textDecoration: "none",
-              filter: "blur(0.3px)",
-              boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px",
-              opacity: "0.7",
-              color: "white",
-              backgroundColor: "#e62739",
-            }
-          : {
-              marginLeft: "15px",
-              marginRight: "15px",
-              marginTop: "5px",
-              marginBottom: "5px",
-              textDecoration: "none",
-              padding: "10px",
-              borderRadius: "15px",
-              color: "black",
-            }
-      }
+      className={`flex w-fit basis-1 gap-2 justify-center items-center p-2 px-5 min-w-max text-sm font-bold text-center hover:bg-opacity-100 active:bg-opacity-90 rounded-xl backdrop-blur-sm transition-all md:text-base outline-[#09073a]/50 bg-grey-200 text-emerald-50 bg-clip-padding backdrop-filter bg-opacity-30 mx-2 ${
+        isCurrentPage && "bg-indigo-400"
+      } `}
     >
       {elementName}
     </Button>
