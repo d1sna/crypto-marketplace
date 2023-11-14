@@ -21,8 +21,12 @@ export default function NewsRow() {
   }, []);
 
   return (
-    <div className="w-full p-2 my-2 bg-gray-900 text-smxl rounded-md flex justify-center items-center">
-      📢 ACTIVITY : {currentNews ? currentNews : " "} | 📈 DAYS TO LISTING TOKEN F [TNF]: 28d
+    <div className="w-full p-2 my-2 bg-gray-900 text-smxl rounded-md flex flex-col sm:flex-row justify-center items-center">
+      📢 ACTIVITY :&nbsp;
+      <p className="text-emerald-500">{currentNews ? currentNews : " "}</p>
+      &nbsp; | &nbsp; 📈 DAYS TO LISTING TOKEN F&nbsp;
+      <p className=" text-purple-600">[TNF]</p>: &nbsp;
+      <p className="text-yellow-400">28d ↓</p>
     </div>
   );
 }

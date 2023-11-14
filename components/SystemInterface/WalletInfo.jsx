@@ -38,7 +38,7 @@ export default function WalletInfo({ full, className }) {
         className="flex flex-col ml-4 border-0 rounded-xl text-sm"
         style={{ boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px" }}
       >
-        <b className="mt-1 border-b border-gray-800">Wallet address:</b>
+        <b className="mt-1 border-b border-gray-800">Address:</b>
         <p>{defaultAccount}</p>
 
         <b className="mt-1 border-b border-gray-800">Balance:</b>

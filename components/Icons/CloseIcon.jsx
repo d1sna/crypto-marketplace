@@ -6,7 +6,7 @@ export default function CloseIcon(props) {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={"w-6 h-6" + props.className}
+      className={"w-4 h-4" + props.className}
     >
       <path
         strokeLinecap="round"

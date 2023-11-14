@@ -8,6 +8,8 @@ import TailwindInput from "../components/SystemInterface/TailwindInput";
 import { getShortAccount } from "../lib/getShortAccount";
 
 import { w3cwebsocket } from "websocket";
+import Image from "next/image";
+import { metaMaskLogo } from "../public";
 
 function Exchange() {
   const { tokenContract, defaultAccount, signer } = UseFullContext();
@@ -29,7 +31,6 @@ function Exchange() {
         const course = Number(JSON.parse(data).p);
         const balanceInUsd = balanceToken * course;
         if (balanceInUsd > 0) setCurrentBalanceInUsd(balanceInUsd.toFixed(2));
-        // setCourse(course);
       };
     } catch (error) {
       console.log("Error while getting course: ", error.message);
@@ -106,21 +107,23 @@ function Exchange() {
 
   return (
     tokenContract && (
-      <div className="flex flex-col justify-center items-center p-2 w-full">
-        <div className="w-full sm:w-[20%] bg-gray-800 flex flex-col justify-center items-center rounded-md p-1 text-sm">
-          <p className="mb-2 flex justify-center font-bold ">
-            💰 Current balance
+      <div className="flex flex-col p-5 w-full h-full  rounded-md my-2 bg-gray-900">
+        <div className="w-full sm:w-[50%] bg-gray-800 flex flex-col justify-center items-center rounded-md p-1 text-sm self-center">
+          <p className="mb-2 flex justify-center font-bold uppercase">
+            💰 Your bot balance :
           </p>
-          <p className="font-bold text-emerald-100">{balanceToken} TNF</p>
-          <p className="my-2 text-emerald-100">
+          <p className="font-bold text-emerald-100 flex">
+            {balanceToken} &nbsp;<div className="text-purple-600">TNF</div>
+          </p>
+          <p className="my-2 text-emerald-100 flex justify-center items-center">
             {currentBalanceInUsd
               ? `  💵 ~ ${currentBalanceInUsd} $ `
               : "  💵 ...waiting course $"}
           </p>
         </div>
 
-        <div className="flex md:flex-row flex-col">
-          {/* <div className="container flex justify-between flex-col p-3 m-1">
+        <div className="flex md:flex-row flex-col justify-between items-center w-full h-full">
+          <div className="flex flex-col justify-between rounded-md mt-2 min-h-[50%] p-5 bg-gray-800 w-full mx-5">
             <p className="mb-2 flex flex-col justify-center text-xl font-bold items-center">
               Transfer
             </p>
@@ -148,9 +151,9 @@ function Exchange() {
             >
               Send
             </button>
-          </div> */}
+          </div>
 
-          <div className="flex flex-col rounded-md mt-4 p-5 border border-gray-800 bg-gray-800">
+          <div className="flex flex-col justify-between rounded-md mt-2 min-h-[50%] p-5 bg-gray-800 w-full mx-5">
             <div className=" mb-2 flex justify-center text-xl font-bold">
               Deposit
             </div>
@@ -172,7 +175,7 @@ function Exchange() {
             </button>
           </div>
 
-          {/* <div className="container flex flex-col p-1 m-1 justify-between">
+          <div className="flex flex-col justify-between rounded-md mt-2 min-h-[50%] p-5 bg-gray-800 w-full mx-5">
             <div className=" mb-2 flex justify-center text-xl font-bold">
               Withdrawal
             </div>
@@ -192,7 +195,7 @@ function Exchange() {
             >
               Sell
             </button>
-          </div> */}
+          </div>
         </div>
       </div>
     )
