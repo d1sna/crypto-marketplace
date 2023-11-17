@@ -33,7 +33,6 @@
   }
 }
 
-
 @layer base {
   html {
     font-family: "Proxima Nova", system-ui, sans-serif;
@@ -48,24 +47,17 @@
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
   position: fixed;
-  filter: blur(10px);
-  z-index: "-999";
-  -webkit-filter: blur(0.1px);
-  background-position: center;
-  background-repeat: "reapeat";
-  background-size: 100vw 110vh;
+  width: 100%;
   height: 100%;
-  backdrop-filter: blur(5px) brightness(90%) contrast(110%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-x: hidden;
   font-family: Play;
   background: linear-gradient(0deg, #060522  30%, #061434);
-  background-size: cover;
-  background-attachment: fixed; /* Опционально, чтобы фон оставался неподвижным при прокрутке */
-  background-position: center;
-  margin: 0;
-  padding: 0;
+  color: white;
+
 }
 
 
@@ -80,30 +72,3 @@ a {
   }
 }
 
-
- 
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
-.mainBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 3px;
-  width: 90vw;
-  height: 90vh;
-  backdrop-filter: blur(10px);
-  backdrop-filter: opacity(0.5);
-}
-
-.container {
-  text-decoration: none;
-  border-radius: 15px;
-  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
-  padding: 15px;
-  margin: 5px;
-  backdrop-filter: blur(2px);
-}

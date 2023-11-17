@@ -6,7 +6,6 @@ function getRandomNumberWithDecimal(min, max, prev) {
   }
 
   const randomNumber = (Math.random() * (max - min) + min + prev).toFixed(2);
-  console.log({ randomNumber });
   return parseFloat(randomNumber);
 }
 
@@ -27,7 +26,7 @@ export default function BotResultRow({
   }, []);
 
   return (
-    <div className="flex text-smxs sm:text-sm sm:justify-between border border-gray-800 w-full p-2 rounded-md m-1 bg-gray-800">
+    <div className="flex text-smxl sm:text-sm sm:justify-between border border-gray-800 w-full p-2 rounded-md m-1 bg-gray-800">
       <div className="mr-2 bg-orange-400 px-2 justify-center items-center flex rounded-md w-[20%]">
         {pair}
       </div>
@@ -56,7 +55,7 @@ export default function BotResultRow({
 
 export const BotResultColumns = () => {
   return (
-    <div className="flex text-smxs sm:text-sm sm:justify-between border border-gray-800 w-full p-2 rounded-md m-1 bg-gray-800">
+    <div className="flex text-smxl sm:text-sm sm:justify-between border border-gray-800 w-full p-2 rounded-md m-1 bg-gray-800">
       <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[20%] ">
         PAIR:
       </div>
@@ -67,7 +66,7 @@ export const BotResultColumns = () => {
         GOAL:
       </div>
       <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[20%] ">
-        <p className="mr-2">STATUS:</p>
+        <div className="mr-2">STATUS:</div>
       </div>
       <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[30%] ">
         TIME:

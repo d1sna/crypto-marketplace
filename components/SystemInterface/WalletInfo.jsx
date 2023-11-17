@@ -39,16 +39,16 @@ export default function WalletInfo({ full, className }) {
         style={{ boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px" }}
       >
         <b className="mt-1 border-b border-gray-800">Address:</b>
-        <p>{defaultAccount}</p>
+        <div>{defaultAccount}</div>
 
         <b className="mt-1 border-b border-gray-800">Balance:</b>
-        <p>
+        <div>
           {currentBalance} ETH
           {currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}
-        </p>
+        </div>
 
         <b className="mt-1 border-b border-gray-800">Current course ETH:</b>
-        <p> {course} USDT</p>
+        <div> {course} USDT</div>
       </div>
     );
 
@@ -57,14 +57,14 @@ export default function WalletInfo({ full, className }) {
       className={`text-xs flex flex-col items-center justify-center mr-2 ${className}`}
       // style={{ boxShadow: "rgb(0 0 0 / 16%) 1px 1px 10px" }}
     >
-      <p className="text-center text-xs">
+      <div className="text-center text-xs">
         {/* <b>Account:</b>  */}
         {getShortAccount(defaultAccount)}
-      </p>
-      <p className="text-center text-smxl">
+      </div>
+      <div className="text-center text-smxl">
         {currentBalance.slice(0, 5)} ETH
-        {/* <p>{currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}</p> */}
-      </p>
+        {/* <div>{currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}</div> */}
+      </div>
     </div>
   );
 }

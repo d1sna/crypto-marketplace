@@ -6,10 +6,18 @@ import mainPageLogo from "./main-page.webp";
 import tradingViewLogo from "./trading_view_logo.png";
 import coinbaseLogo from "./coinbase-logo.jpg";
 import coineditionLogo from "./CoinEdition.svg";
-import aiLogo from "./ai_logo.jpeg";
-import aiLogo2 from "./ai_logo_2.jpeg";
 import metamaskInstruction from "./metamask_instruction.webp";
 import metamaskPaymentInstruction from "./metamask_payment_instruction.png";
+import instructionStepOne from "./instruction-step-1.svg";
+import instructionStepTwo from "./instruction-step-2.svg";
+import instructionStepThree from "./instruction-step-3.svg";
+import aiLogo from "./ai-logo.jpeg";
+
+import connectMetamaskTutorial from "./tutorial/connect.gif";
+import depTutorial from "./tutorial/dep.jpg";
+import metamaskTutorial from "./tutorial/metamaskfox.png";
+import tutorial2 from "./tutorial/tutorial2.gif";
+import testReview from "./reviews/test-review.png";
 
 export {
   metaMaskLogo,
@@ -21,7 +29,14 @@ export {
   coinbaseLogo,
   coineditionLogo,
   aiLogo,
-  aiLogo2,
   metamaskInstruction,
   metamaskPaymentInstruction,
+  instructionStepOne,
+  instructionStepTwo,
+  instructionStepThree,
+  connectMetamaskTutorial,
+  depTutorial,
+  metamaskTutorial,
+  tutorial2,
+  testReview,
 };

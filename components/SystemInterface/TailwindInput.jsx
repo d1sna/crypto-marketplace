@@ -1,3 +1,4 @@
+import { isNumber } from "lodash";
 import { useState } from "react";
 
 const charRegexp = /^[A-Za-z0-9]+$/;
@@ -26,24 +27,30 @@ export default function TailwindInput({
         {label}
       </label>
       <input
-        onChange={(e) => {
-          try {
-            if (!e.target.value) throw new Error("Cant be empty");
+        onChange={onChange}
+        // onChange={(e) => {
+        //   try {
+        //     console.log({ e });
+        //     // if (!e.target.value) throw new Error("Cant be empty");
 
-            if (isNumbersOnly && !numberRegexp.test(e.target.value))
-              throw new Error("Only numbers pls");
+        //     const valueNumber = Number(e.target.value);
+        //     if (isNumbersOnly && !isNumber(valueNumber)) {
+        //       onChange(0);
+        //       throw new Error("Only numbers pls");
+        //     }
 
-            if (!isNumbersOnly && !charRegexp.test(e.target.value))
-              throw new Error("Incorrect value");
+        //     // if (!isNumbersOnly && !charRegexp.test(e.target.value)) {
+        //     //   throw new Error("Incorrect value");
+        //     // }
 
-            onChange(e);
-            setIsValid(true);
-            setErrorMessage("");
-          } catch (error) {
-            setIsValid(false);
-            setErrorMessage(error.message);
-          }
-        }}
+        //     onChange(e);
+        //     setIsValid(true);
+        //     setErrorMessage("");
+        //   } catch (error) {
+        //     setIsValid(false);
+        //     setErrorMessage(error.message);
+        //   }
+        // }}
         type="text"
         id={id}
         value={value}

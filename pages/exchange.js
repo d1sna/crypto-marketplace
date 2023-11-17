@@ -9,7 +9,8 @@ import { getShortAccount } from "../lib/getShortAccount";
 
 import { w3cwebsocket } from "websocket";
 import Image from "next/image";
-import { metaMaskLogo } from "../public";
+import { metaMaskLogo, metamaskPaymentInstruction } from "../public";
+import NewsRow from "../components/SystemInterface/NewsRow";
 
 function Exchange() {
   const { tokenContract, defaultAccount, signer } = UseFullContext();
@@ -18,6 +19,8 @@ function Exchange() {
   const [tnfTransferAmount, setTransferTnfAmount] = useState();
   const [tnfDepositAmount, setTnfDepositAmount] = useState();
   const [tnfAddressTo, setTnfAddressTo] = useState();
+  const [tnfWithdrawalAmount, setTnfWithdrawalAmount] = useState();
+
   const [manualFetchBalance, setManualFetchBalance] = useState(false);
 
   const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState(null);
@@ -35,7 +38,7 @@ function Exchange() {
     } catch (error) {
       console.log("Error while getting course: ", error.message);
     }
-  });
+  }, [balanceToken]);
 
   useEffect(() => {
     const getTokenBalance = async () => {
@@ -107,26 +110,51 @@ function Exchange() {
 
   return (
     tokenContract && (
-      <div className="flex flex-col p-5 w-full h-full  rounded-md my-2 bg-gray-900">
-        <div className="w-full sm:w-[50%] bg-gray-800 flex flex-col justify-center items-center rounded-md p-1 text-sm self-center">
-          <p className="mb-2 flex justify-center font-bold uppercase">
-            💰 Your bot balance :
-          </p>
-          <p className="font-bold text-emerald-100 flex">
-            {balanceToken} &nbsp;<div className="text-purple-600">TNF</div>
-          </p>
-          <p className="my-2 text-emerald-100 flex justify-center items-center">
-            {currentBalanceInUsd
-              ? `  💵 ~ ${currentBalanceInUsd} $ `
-              : "  💵 ...waiting course $"}
-          </p>
+      <div className="flex flex-col h-full justify-center items-center rounded-md">
+        <NewsRow />
+
+        <div className="flex w-full h-full flex-col sm:flex-row my-5">
+          <div className="flex justify-between items-center w-full h-full sm:h-[25%] sm:mr-4 bg-gray-800 rounded-md p-2  my-2 cursor-pointer">
+            <div className="shadow-md">
+              <Image
+                width={250}
+                height={150}
+                className="rounded-xl"
+                src={metamaskPaymentInstruction}
+              />
+            </div>
+
+            <div className="flex flex-col ml-2 p-2 w-full h-full ">
+              <div className="my-1 border-b border-gray-400  flex flex-col">
+                Здесь будет инструкция по пополнению
+              </div>
+              <div className="text-smxl hidden sm:flex">
+                Инструкция говорит что нужно установить метамаск и закинуть
+                денежку пацанам...
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full h-full sm:w-[50%] bg-gray-800 flex sm:h-[25%] flex-col justify-center items-center rounded-md p-1 text-sm self-center">
+            <div className="mb-2 flex justify-center font-bold uppercase">
+              💰 Your bot balance :
+            </div>
+            <div className="font-bold text-emerald-100 flex">
+              {balanceToken} &nbsp;<div className="text-purple-600">TNF</div>
+            </div>
+            <div className="my-2 text-emerald-100 flex justify-center items-center">
+              {currentBalanceInUsd
+                ? `  💵 ~ ${currentBalanceInUsd} $ `
+                : "  💵 ...waiting course $"}
+            </div>
+          </div>
         </div>
 
-        <div className="flex md:flex-row flex-col justify-between items-center w-full h-full">
-          <div className="flex flex-col justify-between rounded-md mt-2 min-h-[50%] p-5 bg-gray-800 w-full mx-5">
-            <p className="mb-2 flex flex-col justify-center text-xl font-bold items-center">
+        <div className="flex sm:flex-row flex-col justify-center items-center w-full h-full sm:w-[60%]  my-2">
+          {/* <div className="flex flex-col justify-between rounded-md mt-2 min-h-[50%] p-5 bg-gray-800 w-full mx-5">
+            <div className="mb-2 flex flex-col justify-center text-xl font-bold items-center">
               Transfer
-            </p>
+            </div>
 
             <div className="mx-2 w-full">
               <TailwindInput
@@ -151,7 +179,7 @@ function Exchange() {
             >
               Send
             </button>
-          </div>
+          </div> */}
 
           <div className="flex flex-col justify-between rounded-md mt-2 min-h-[50%] p-5 bg-gray-800 w-full mx-5">
             <div className=" mb-2 flex justify-center text-xl font-bold">
@@ -186,12 +214,12 @@ function Exchange() {
                 id="withdrawal_amount"
                 placeholder="0.01"
                 isNumbersOnly
-                onChange={(e) => setTnfAmount(e.target.value)}
+                onChange={(e) => setTnfWithdrawalAmount(e.target.value)}
               />
             </div>
             <button
               // onClick={buyTokenForEth}
-              className="text-white bg-blue-700 hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-2 self-center"
+              className="text-white bg-blue-700 hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-[80%] px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-2 self-center"
             >
               Sell
             </button>

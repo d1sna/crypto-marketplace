@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 
 let tvScriptLoadingPromise;
 
-const TradingViewWidget = React.memo((props) => {
+const TradingViewWidget = ({ pair }) => {
   const onLoadScriptRef = useRef();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const TradingViewWidget = React.memo((props) => {
     tvScriptLoadingPromise.then(
       () => onLoadScriptRef.current && onLoadScriptRef.current()
     );
-
+    
     return () => (onLoadScriptRef.current = null);
 
     function createWidget() {
@@ -33,29 +33,29 @@ const TradingViewWidget = React.memo((props) => {
         document.getElementById("tradingview_d7a37") &&
         "TradingView" in window
       ) {
-        const currency = props.pair || "BTCUSD";
+        const currency = pair || "BTCUSD";
         new window.TradingView.widget({
           autosize: true,
-          // width: "600px",
           symbol: `BITSTAMP:${currency}`,
           interval: "15",
           timezone: "Etc/UTC",
           theme: "dark",
-          style: "1",
+          style: "2",
           locale: "en",
           enable_publishing: false,
-          // hide_top_toolbar: true,
           hide_legend: true,
           save_image: false,
+          container_id: "tradingview_d7a37",
+          // hide_top_toolbar: true,
           // hide_volume: true,
           // allow_symbol_change: true,
-          container_id: "tradingview_d7a37",
+          // width: "600px",e
         });
       }
     }
-  }, [props]);
+  }, [pair, tvScriptLoadingPromise]);
 
   return <div id="tradingview_d7a37" className={"h-full w-full"} />;
-});
+};
 
 export default TradingViewWidget;

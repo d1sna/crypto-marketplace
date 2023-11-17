@@ -54,7 +54,10 @@ function MetamaskInstallButton() {
 
   if (!loggedIn)
     return (
-      <Button className="hover:bg-red-400 bg-indigo-200 " onClick={startConnectMetamask}>
+      <Button
+        className="hover:bg-red-400 bg-indigo-200"
+        onClick={startConnectMetamask}
+      >
         <Image
           alt=""
           style={{

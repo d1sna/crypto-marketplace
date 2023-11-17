@@ -23,9 +23,9 @@ export default function Navbar() {
   const [openedDialog, setOpenedDialog] = useState("");
 
   return (
-    <nav className="mt-2 sm:mt-0 flex flex-row justify-between items-center w-full z-50 text-white border-b border-gray-800 py-1">
+    <nav className="flex flex-row justify-between items-center w-full z-50 py-1 text-white border-b border-gray-800">
       <div className="flex">
-        <Link href="/" className="hidden sm:flex text-white-400 text-xl">
+        <Link href="/" className="flex text-white-400 text-xl">
           {/* <Image src={aiLogo} height={40} width={40}/> */}
           TradingAI
         </Link>
@@ -40,13 +40,13 @@ export default function Navbar() {
       )}
 
       {defaultAccount && (
-        <div className="flex text-sm items-center w-full sm:w-1/3 px-2 bg-indigo-400 rounded-full bg-grey-200 text-emerald-50 bg-clip-padding backdrop-filter bg-opacity-30 max-h-[100%] justify-between py-1">
-          <NotificationIcon onClick={() => setOpenedDialog("notifications")} />
-          <MessageIcon onClick={() => setOpenedDialog("messages")} />
+        <div className="flex text-sm items-center w-auto px-4 bg-indigo-400 rounded-full bg-grey-200 text-emerald-50 bg-clip-padding backdrop-filter bg-opacity-30 max-h-[100%] justify-between py-1">
+          {/* <NotificationIcon onClick={() => setOpenedDialog("notifications")} />
+          <MessageIcon onClick={() => setOpenedDialog("messages")} /> */}
           <WalletInfo className="text-xs" full={false} />
           <WalletIcon onClick={() => setOpenedDialog("wallet")} />
-          <SettingsIcon onClick={() => setOpenedDialog("settings")} />
-          <AccountIcon onClick={() => setOpenedDialog("account")} />
+          {/* <SettingsIcon onClick={() => setOpenedDialog("settings")} />
+          <AccountIcon onClick={() => setOpenedDialog("account")} /> */}
         </div>
       )}
 
@@ -136,7 +136,7 @@ export default function Navbar() {
 
       {openedDialog === "menu" && (
         <Dialog
-          className="absolute right-0 sm:right-8 top-16 w-full sm:w-[40%] h-full sm:h-[60%] p-3"
+          className="absolute right-0 sm:right-8 top-16 w-full sm:w-[40%] h-screen sm:h-[60%] p-3"
           onClose={() => setOpenedDialog("")}
         >
           <div className="border-b border-gray-600 flex justify-center items-center">
