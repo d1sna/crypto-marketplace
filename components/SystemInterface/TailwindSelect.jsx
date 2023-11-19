@@ -2,21 +2,9 @@
 
 export const TailwindSelect = ({
   onChange = () => {},
-  values = [
-    "Automatic",
-    "Support And Resistance Trading",
-    "Candlestick Patterns Trading",
-    "Arbitrage",
-    "Algorithmic Trading",
-    "Smart money",
-    "Trend Following",
-    "Overbought / Oversold",
-    "Moving Average Crossover",
-    "News-based Trading",
-    "Pair Trading",
-  ],
+  values,
   selected,
-  label = "Select strategy",
+  label,
 }) => {
   return (
     <div className="w-full p-2 rounded-lg">

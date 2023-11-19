@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import TradingViewWidget from "../components/Widgets/TradingViewWidget";
 import { useEffect, useState } from "react";
 import TailwindInput from "../components/SystemInterface/TailwindInput";
@@ -10,71 +9,42 @@ import WithConnectedWallet from "../components/SystemInterface/WithConnectedWall
 import { mainPageLogo } from "../public";
 import Image from "next/image";
 import { TailwindSelect } from "../components/SystemInterface/TailwindSelect";
+import { toast } from "react-toastify";
+import { uuid } from "uuidv4";
+import axios from "axios";
 
 // TODO: change
 const course = 2015;
 
+function formatTimeUntil(timestamp) {
+  const now = Math.floor(Date.now() / 1000); // Текущее время в Unix timestamp
+  const timeDifference = timestamp - now;
+
+  if (timeDifference <= 0) {
+    return "Time has already passed";
+  }
+
+  const d = Math.floor(timeDifference / (60 * 60 * 24));
+  const h = Math.floor((timeDifference % (60 * 60 * 24)) / (60 * 60));
+  const m = Math.floor((timeDifference % (60 * 60)) / 60);
+  const s = timeDifference % 60;
+
+  return { d, h, m, s };
+}
+
 const timeValues = [
   "Automatic",
-  "1h - 2h",
-  "2h - 5h",
-  "5h - 10h",
-  "10h - 1d",
-  "1d - 2d",
-  "3d - 7d",
+  "24 h",
+  "36 h",
+  "48 h",
+  "60 h",
+  "72 h",
+  "96 h",
 ];
 
 const calculateTime = (estimatedTimeIndex, percentageRisk, valueUsd) => {
-  // Определение времени в часах на основе индекса
-  const timeOptions = ["2h", "5h", "10h", "1d", "2d", "7d"];
-  const selectedTime = timeOptions[estimatedTimeIndex];
-  console.log({ selectedTime });
-
-  // Динамический коэффициент X
-  const X = Math.min(Math.max((percentageRisk + valueUsd) / 2, -1), 1);
-
-  // Текущая дата и время
-  const now = new Date();
-
-  // Вычисление времени на основе индекса и коэффициента X
-  let estimatedTime;
-  switch (selectedTime) {
-    case "2h":
-      estimatedTime = now.getTime() + X * 2 * 60 * 60 * 1000;
-      break;
-    case "5h":
-      estimatedTime = now.getTime() + X * 5 * 60 * 60 * 1000;
-      break;
-    case "10h":
-      estimatedTime = now.getTime() + X * 10 * 60 * 60 * 1000;
-      break;
-    case "1d":
-      estimatedTime = now.getTime() + X * 24 * 60 * 60 * 1000;
-      break;
-    case "2d":
-      estimatedTime = now.getTime() + X * 2 * 24 * 60 * 60 * 1000;
-      break;
-    case "7d":
-      estimatedTime = now.getTime() + X * 7 * 24 * 60 * 60 * 1000;
-      break;
-    default:
-      estimatedTime = now.getTime();
-  }
-
-  return new Date(estimatedTime);
-};
-
-const calculateTimeDifference = (targetDate) => {
-  const now = new Date();
-  const difference = targetDate - now;
-
-  const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-  const hours = Math.floor(
-    (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-  );
-  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-
-  return `${days} дней, ${hours} часов, ${minutes} минут`;
+  if (estimatedTimeIndex === 0) return timeValues[3];
+  return timeValues[estimatedTimeIndex];
 };
 
 const getXByValue = (value) => {
@@ -97,13 +67,28 @@ const getChanceColor = (chanceToWin) => {
   if (chanceToWin < 100) return "text-green-400";
 };
 
+const strategyValues = [
+  "Automatic",
+  "Support And Resistance Trading",
+  "Candlestick Patterns Trading",
+  "Arbitrage",
+  "Algorithmic Trading",
+  "Smart money",
+  "Trend Following",
+  "Overbought / Oversold",
+  "Moving Average Crossover",
+  "News-based Trading",
+  "Pair Trading",
+];
+
 function BotPage() {
   const [pair, setPair] = useState("btcusdt");
-  const { tokenContract, defaultAccount } = UseFullContext();
+  const { tokenContract, defaultAccount, signer } = UseFullContext();
   const [manualFetchBalance, setManualFetchBalance] = useState(false);
   const [balanceToken, setBalanceToken] = useState(null);
 
   const [estimatedTimeIndex, setEstimatedTimeIndex] = useState(0);
+  const [selectedStrategyIndex, setSelectedStrategyIndex] = useState(0);
   const [percentageRisk, setPercentageRisk] = useState(0.1);
   const [awaitingResult, setAwaitingResult] = useState(0);
   const [chanceToWin, setChanceToWin] = useState(0);
@@ -118,6 +103,52 @@ function BotPage() {
 
   const [field, setField] = useState("trade");
 
+  const [allCurrentBots, setAllCurrentBots] = useState([]);
+
+  const startBot = async () => {
+    try {
+      // const amount = ethers.utils.parseEther(tokenValue);
+      const calculatedTimeInSec =
+        parseInt(calculatedTime.split(" ")[0], 10) * 60 * 60;
+      const botId = uuid();
+      const startTime = Date.now() / 1000;
+      const finishTime = Math.floor(startTime + calculatedTimeInSec);
+
+      const tx = await tokenContract
+        .connect(signer)
+        .addBotTime(botId, finishTime);
+
+      try {
+        await axios.post("/api/save-bot", {
+          botId,
+          tx,
+          finishTime,
+          startTime,
+          tokenValue,
+          pair,
+          percentageRisk,
+          currentResult: 0,
+          awaitingResult: awaitingResult / course,
+        });
+      } catch (error) {
+        console.log({ error });
+      }
+
+      toast.warn(`Transaction pending... Hash:${tx.hash}`, {
+        autoClose: 10000,
+      });
+      await tx.wait();
+
+      toast.success(`Transaction successful:
+      bot started `);
+
+      setManualFetchBalance(true);
+    } catch (error) {
+      toast.error(`Error while starting bot: ${error.message}`);
+      console.log({ error });
+    }
+  };
+
   useEffect(() => {
     setAwaitingResult(
       valueUsd * (percentageRisk * 10 * getXByValue(valueUsd).toFixed(2))
@@ -131,9 +162,7 @@ function BotPage() {
       );
 
     setCalculatedTime(
-      calculateTimeDifference(
-        calculateTime(estimatedTimeIndex, percentageRisk, valueUsd)
-      )
+      calculateTime(estimatedTimeIndex, percentageRisk, valueUsd)
     );
 
     setChanceToWinColor(getChanceColor(chanceToWin));
@@ -151,7 +180,56 @@ function BotPage() {
       }
     };
 
-    if (tokenContract) getTokenBalance();
+    const getAllBots = async () => {
+      try {
+        const result = await tokenContract.getAllBotTimes();
+        const botMap = new Map([]);
+        const botIds = result[0];
+
+        result[1].forEach((bigTime, i) =>
+          botMap.set(
+            botIds[i],
+            parseInt(String(ethers.BigNumber.from(bigTime)))
+          )
+        );
+
+        let parsedBots;
+        try {
+          const bots = await axios
+            .post("/api/get-bots", { botIds })
+            .then(({ data }) => data);
+
+          console.log({ bots });
+          parsedBots = bots.map((bot) => {
+            const botId = bot.botId;
+            const botTime = botMap.get(botId);
+            const botAwaitingResult = bot.awaitingResult;
+            const botStartedValue = bot.tokenValue;
+            const botPair = bot.pair;
+            const botCurrentResult = bot.currentResult;
+
+            return {
+              botPair,
+              botId,
+              botTime,
+              botAwaitingResult,
+              botStartedValue,
+              botCurrentResult,
+            };
+          });
+        } catch (error) {}
+
+        console.log({ parsedBots });
+        setAllCurrentBots(parsedBots.reverse().slice(0, 5));
+      } catch (e) {
+        console.log("ERROR WHILE GETTING BOTS", e.message);
+      }
+    };
+
+    if (tokenContract) {
+      getTokenBalance();
+      getAllBots();
+    }
     setManualFetchBalance(false);
   }, [defaultAccount, tokenContract, manualFetchBalance]);
 
@@ -190,14 +268,28 @@ function BotPage() {
               🤖 YOUR BOTS:
             </div>
             <BotResultColumns />
-            <BotResultRow
-              pair="BTC/USDT"
-              entirePrice="2054$"
-              goalPrice="3100$"
-              status="in progress"
-              remainingTime="~ 1d 21h 32m"
-              currentResult={29.32}
-            />
+            {allCurrentBots.map((bot) => {
+              console.log({
+                bot: new Date(bot.time * 1000),
+                now: new Date(Date.now()),
+              });
+              return (
+                <BotResultRow
+                  pair={bot.botPair}
+                  entirePrice={`~ ${bot.botStartedValue * course} $`}
+                  goalPrice={`~ ${(bot.botAwaitingResult * course).toFixed(
+                    2
+                  )} $`}
+                  status={
+                    new Date(Date.now()) >= new Date(bot.botTime * 1000)
+                      ? "done"
+                      : "in progress"
+                  }
+                  remainingTime={formatTimeUntil(bot.botTime)}
+                  currentResultValue={bot.botCurrentResult}
+                />
+              );
+            })}
           </div>
         </div>
 
@@ -207,18 +299,23 @@ function BotPage() {
               🔥 Popular trading pairs
             </h3>
             <div className="text-xs">
-              <Button
+              <div
                 onClick={() => setPair("btcusdt")}
-                className={pair === "btcusdt" && "bg-gray-800 m-1 text-white"}
+                className={`
+                rounded-md p-2 cursor-pointer ${
+                  pair === "btcusdt" && "bg-gray-800 m-1 text-white"
+                }`}
               >
                 BTC/USDT
-              </Button>
-              <Button
+              </div>
+              <div
                 onClick={() => setPair("ethusdt")}
-                className={pair === "ethusdt" && "bg-gray-800 m-1 text-white"}
+                className={`rounded-md p-2 cursor-pointer ${
+                  pair === "ethusdt" && "bg-gray-800 m-1 text-white"
+                }`}
               >
                 ETH/USDT
-              </Button>
+              </div>
             </div>
           </div>
 
@@ -332,12 +429,18 @@ function BotPage() {
           {field === "tools" && (
             <div className="flex flex-col w-full h-full justify-center items-center">
               <div>Bot strategy</div>
-              <TailwindSelect />
+              <TailwindSelect
+                values={strategyValues}
+                selected={strategyValues[selectedStrategyIndex]}
+                onChange={(e) => setSelectedStrategyIndex(e.target.value)}
+                label="Select strategy"
+              />
 
               <div>Bot strategy</div>
               <TailwindSelect
                 values={timeValues}
                 label="Select awaiting time"
+                selected={timeValues[estimatedTimeIndex]}
                 onChange={(e) => setEstimatedTimeIndex(e.target.value)}
               />
             </div>
@@ -361,12 +464,16 @@ function BotPage() {
           </div>
 
           <div className="flex justify-center pb-2 w-full mt-2">
-            <Button
-              disabled={!awaitingResult}
-              className="bg-green-600  text-white w-[40%] mx-1"
+            <div
+              className={`uppercase p-2 rounded-md text-white w-[40%] mx-1 flex justify-center items-center ${
+                !awaitingResult ? "bg-gray-400" : "bg-green-600 cursor-pointer"
+              }`}
+              onClick={async () => {
+                if (awaitingResult) await startBot();
+              }}
             >
               Start bot
-            </Button>
+            </div>
           </div>
         </div>
       </div>

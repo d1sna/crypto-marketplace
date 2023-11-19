@@ -2,6 +2,7 @@ import Image from "next/image";
 import NewsRow from "../components/SystemInterface/NewsRow";
 import {
   aiLogo,
+  cyberEye,
   instructionStepOne,
   instructionStepThree,
   instructionStepTwo,
@@ -13,13 +14,13 @@ import { TypingEffect } from "../components/TypingEffect";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CountDownTimer } from "../components/CountDownTimer";
-import getTimeUntilNextDay from "../lib/getTimeUntilNextDay";
+import getTimeUntilNextDate from "../lib/getTimeUntilNextDate";
 
 export default function Index() {
   const { defaultAccount } = UseFullContext();
   const [rendered, setRendered] = useState(false);
 
-  const { hours, minutes, seconds } = getTimeUntilNextDay();
+  const { hours, minutes, seconds } = getTimeUntilNextDate();
 
   useEffect(() => {
     const asyncTask = async () => {
@@ -60,20 +61,25 @@ export default function Index() {
       )}
 
       <Image
-        src={aiLogo}
+        src={cyberEye}
         width={120}
-        height={70}
-        className="rounded-full m-2"
+        height={120}
+        className="rounded-full m-2 w-[70%] sm:w-[30%] bg-black opacity-50 shadow-2xl"
       />
+
       <div className="w-full h-full flex p-3 my-2 border-b border-gray-900 text-2xl">
         <div className="flex flex-col w-full h-full justify-center items-center">
           <TypingEffect
             text={"First ever crypto trading AI."}
-            className={"bg-gray-650 rounded-md p-2"}
+            className={
+              "bg-gray-650 rounded-md p-2 flex justify-center items-center"
+            }
           />
           {rendered && (
             <TypingEffect
-              className={"bg-gray-650 rounded-md w-auto p-2"}
+              className={
+                "bg-gray-650 rounded-md w-auto p-2 flex justify-center items-center"
+              }
               text={`Don't think about risks and begin getting money with crypto bot.`}
             />
           )}

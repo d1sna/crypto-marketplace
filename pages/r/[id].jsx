@@ -8,9 +8,6 @@ const RefPage = () => {
 
   useEffect(() => {
     Cookies.set("ref", id);
-    // const cookieValue = Cookies.get("myCookie");
-    // console.log("Cookie Value:", cookieValue);
-    // Cookies.remove("myCookie");
     router.push("/");
   }, [id, router]);
 

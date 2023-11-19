@@ -6,7 +6,7 @@ import NavBarElement from "./NavBarElement";
 import WalletInfo from "./WalletInfo";
 
 import MetamaskInstallButton from "./MetamaskInstallButton";
-import { Button } from "@mui/material";
+
 import NotificationIcon from "../Icons/NotificationIcon";
 import MessageIcon from "./MessageIcon";
 import WalletIcon from "../Icons/WalletIcon";
@@ -16,7 +16,8 @@ import { useState } from "react";
 import Dialog from "./Dialog";
 import CloseIcon from "../Icons/CloseIcon";
 import Image from "next/image";
-import { aiLogo } from "../../public";
+import { cyberEye } from "../../public";
+import { TypingEffect } from "../TypingEffect";
 
 export default function Navbar() {
   const { defaultAccount } = UseFullContext();
@@ -25,9 +26,18 @@ export default function Navbar() {
   return (
     <nav className="flex flex-row justify-between items-center w-full z-50 py-1 text-white border-b border-gray-800">
       <div className="flex">
-        <Link href="/" className="flex text-white-400 text-xl">
+        <Link
+          href="/"
+          className="flex justify-center items-center text-white-400 text-md sm:text-xl"
+        >
+          <Image
+            src={cyberEye}
+            width={70}
+            height={70}
+            className="rounded-full m-2 bg-black opacity-80"
+          />
           {/* <Image src={aiLogo} height={40} width={40}/> */}
-          TradingAI
+          <TypingEffect text={"TradingAI"} className={"min-w-full"} />
         </Link>
       </div>
 
@@ -45,6 +55,23 @@ export default function Navbar() {
           <MessageIcon onClick={() => setOpenedDialog("messages")} /> */}
           <WalletInfo className="text-xs" full={false} />
           <WalletIcon onClick={() => setOpenedDialog("wallet")} />
+          <div className="sm:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-7 h-7 text-sm text-white hover:bg-red-400 rounded-full p-1"
+              onClick={() => setOpenedDialog("menu")}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </div>
           {/* <SettingsIcon onClick={() => setOpenedDialog("settings")} />
           <AccountIcon onClick={() => setOpenedDialog("account")} /> */}
         </div>
@@ -163,30 +190,6 @@ export default function Navbar() {
       )}
 
       <MetamaskInstallButton />
-
-      {defaultAccount && (
-        <div className="sm:hidden">
-          <Button
-            className="text-sm text-white"
-            onClick={() => setOpenedDialog("menu")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-7 h-7"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>
-          </Button>
-        </div>
-      )}
     </nav>
   );
 }

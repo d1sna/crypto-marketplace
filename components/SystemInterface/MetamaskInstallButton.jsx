@@ -1,5 +1,3 @@
-import { Button } from "@mui/material";
-
 import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
@@ -37,7 +35,7 @@ function MetamaskInstallButton() {
   if (!isWalletInstalled)
     return (
       <a target="_blank" href="https://metamask.io/download/" rel="noreferrer">
-        <Button className="hover:bg-red-400 bg-indigo-200 my-2 rounded-xl">
+        <div className="hover:bg-red-400 bg-indigo-200 my-2 rounded-xl">
           <Image
             alt=""
             style={{
@@ -48,13 +46,13 @@ function MetamaskInstallButton() {
             }}
             src={metaMaskLogo}
           />
-        </Button>
+        </div>
       </a>
     );
 
   if (!loggedIn)
     return (
-      <Button
+      <div
         className="hover:bg-red-400 bg-indigo-200"
         onClick={startConnectMetamask}
       >
@@ -68,7 +66,7 @@ function MetamaskInstallButton() {
           }}
           src={metaMaskLogo}
         />
-      </Button>
+      </div>
     );
 
   return null;

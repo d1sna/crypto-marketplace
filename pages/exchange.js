@@ -3,26 +3,22 @@ import WithConnectedWallet from "../components/SystemInterface/WithConnectedWall
 import UseFullContext from "../lib/useFullContext";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
-
 import TailwindInput from "../components/SystemInterface/TailwindInput";
-import { getShortAccount } from "../lib/getShortAccount";
-
 import { w3cwebsocket } from "websocket";
 import Image from "next/image";
-import { metaMaskLogo, metamaskPaymentInstruction } from "../public";
+import { metamaskPaymentInstruction } from "../public";
 import NewsRow from "../components/SystemInterface/NewsRow";
+import axios from "axios";
+import ImportTokenButton from "../components/ImportTokenButton";
 
 function Exchange() {
   const { tokenContract, defaultAccount, signer } = UseFullContext();
-
   const [balanceToken, setBalanceToken] = useState(null);
-  const [tnfTransferAmount, setTransferTnfAmount] = useState();
-  const [tnfDepositAmount, setTnfDepositAmount] = useState();
-  const [tnfAddressTo, setTnfAddressTo] = useState();
+  const [tokenDepositAmount, setTokenDepositAmount] = useState();
+  // const [tnfTransferAmount, setTransferTnfAmount] = useState();
+  // const [tnfAddressTo, setTnfAddressTo] = useState();
   const [tnfWithdrawalAmount, setTnfWithdrawalAmount] = useState();
-
   const [manualFetchBalance, setManualFetchBalance] = useState(false);
-
   const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState(null);
 
   useEffect(() => {
@@ -55,42 +51,54 @@ function Exchange() {
     setManualFetchBalance(false);
   }, [defaultAccount, tokenContract, manualFetchBalance]);
 
-  const sendTokenToAddress = async () => {
-    try {
-      const amount = ethers.utils.parseEther(tnfTransferAmount);
-      const tx = await tokenContract
-        .connect(signer)
-        .transfer(tnfAddressTo, amount, {
-          gasLimit: 70000,
-        });
+  // const sendTokenToAddress = async () => {
+  //   try {
+  //     const amount = ethers.utils.parseEther(tnfTransferAmount);
+  //     const tx = await tokenContract
+  //       .connect(signer)
+  //       .transfer(tnfAddressTo, amount, {
+  //         gasLimit: 70000,
+  //       });
 
-      toast.warn(`Transaction pending... Hash:${tx.hash}`, {
-        autoClose: 10000,
-      });
-      await tx.wait();
+  //     toast.warn(`Transaction pending... Hash:${tx.hash}`, {
+  //       autoClose: 10000,
+  //     });
+  //     await tx.wait();
 
-      toast.success(
-        `Transaction successful: ${tnfTransferAmount} TNF sent to ${getShortAccount(
-          tnfAddressTo
-        )}`
-      );
+  //     toast.success(
+  //       `Transaction successful: ${tnfTransferAmount} TNF sent to ${getShortAccount(
+  //         tnfAddressTo
+  //       )}`
+  //     );
 
-      setTransferTnfAmount("");
-      setTnfAddressTo("");
-      setManualFetchBalance(true);
-    } catch (error) {
-      toast.error("Error while transfer token :(");
-      console.log({ error });
-    }
-  };
+  //     setTransferTnfAmount("");
+  //     setTnfAddressTo("");
+  //     setManualFetchBalance(true);
+  //   } catch (error) {
+  //     toast.error("Error while transfer token :(");
+  //     console.log({ error });
+  //   }
+  // };
 
   const buyTokenForEth = async () => {
     try {
-      const amount = ethers.utils.parseEther(tnfDepositAmount);
+      const amount = ethers.utils.parseEther(tokenDepositAmount);
       const tx = await tokenContract.connect(signer).deposit({
         value: amount,
         gasLimit: 70000,
       });
+
+      try {
+        await axios.post("/api/pay", {
+          tokenDepositAmount,
+          amount,
+          tx,
+          defaultAccount,
+          status: "pending",
+        });
+      } catch (error) {
+        console.log({ error });
+      }
 
       toast.warn(`Transaction pending... Hash:${tx.hash}`, {
         autoClose: 10000,
@@ -98,9 +106,38 @@ function Exchange() {
       await tx.wait();
 
       toast.success(`Transaction successful: 
-      bought ${tnfDepositAmount} TNF `);
+      bought ${tokenDepositAmount} TNF `);
 
-      setTnfDepositAmount("");
+      setTokenDepositAmount("");
+      setManualFetchBalance(true);
+
+      await axios.post("/api/pay", {
+        tokenDepositAmount,
+        amount,
+        tx,
+        defaultAccount,
+        status: "successful",
+      });
+    } catch (error) {
+      toast.error(`Error while deposit token: ${error.message}`);
+      console.log({ error });
+    }
+  };
+
+  const sellTokenForEth = async () => {
+    try {
+      const amount = ethers.utils.parseEther(tnfWithdrawalAmount);
+      const tx = await tokenContract.connect(signer).withdrawUserETH(amount);
+
+      toast.warn(`Transaction pending... Hash:${tx.hash}`, {
+        autoClose: 10000,
+      });
+      await tx.wait();
+
+      toast.success(`Transaction successful: 
+      sell ${tnfWithdrawalAmount} TNF `);
+
+      setTnfWithdrawalAmount("");
       setManualFetchBalance(true);
     } catch (error) {
       toast.error(`Error while deposit token: ${error.message}`);
@@ -147,6 +184,8 @@ function Exchange() {
                 ? `  💵 ~ ${currentBalanceInUsd} $ `
                 : "  💵 ...waiting course $"}
             </div>
+
+            <ImportTokenButton />
           </div>
         </div>
 
@@ -192,7 +231,7 @@ function Exchange() {
                 id="deposit_amount"
                 placeholder="0.01"
                 isNumbersOnly
-                onChange={(e) => setTnfDepositAmount(e.target.value)}
+                onChange={(e) => setTokenDepositAmount(e.target.value)}
               />
             </div>
             <button
@@ -220,6 +259,7 @@ function Exchange() {
             <button
               // onClick={buyTokenForEth}
               className="text-white bg-blue-700 hover:bg-red-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-[80%] px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-2 self-center"
+              onClick={async () => await sellTokenForEth()}
             >
               Sell
             </button>

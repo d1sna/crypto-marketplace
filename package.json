@@ -13,9 +13,6 @@
     "@emotion/styled": "^11.10.5",
     "@metamask/onboarding": "^1.0.1",
     "@metamask/providers": "^11.0.0",
-    "@mui/icons-material": "^5.10.9",
-    "@mui/material": "^5.10.11",
-    "@mui/system": "^5.10.10",
     "@next/font": "13.1.1",
     "axios": "^1.6.2",
     "eslint-config-next": "13.1.1",
@@ -27,6 +24,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-toastify": "^9.1.1",
+    "sharp": "^0.32.6",
+    "uuidv4": "^6.2.13",
     "websocket": "^1.0.34"
   },
   "devDependencies": {

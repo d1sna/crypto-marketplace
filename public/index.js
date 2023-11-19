@@ -18,6 +18,7 @@ import depTutorial from "./tutorial/dep.jpg";
 import metamaskTutorial from "./tutorial/metamaskfox.png";
 import tutorial2 from "./tutorial/tutorial2.gif";
 import testReview from "./reviews/test-review.png";
+import cyberEye from "./cyber_eye.jpeg";
 
 export {
   metaMaskLogo,
@@ -39,4 +40,5 @@ export {
   metamaskTutorial,
   tutorial2,
   testReview,
+  cyberEye,
 };

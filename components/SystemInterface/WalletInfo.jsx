@@ -1,4 +1,3 @@
-import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
@@ -13,8 +12,6 @@ export default function WalletInfo({ full, className }) {
 
   const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState();
   const [course, setCourse] = useState("⌛ ...waiting course");
-
-  if (!defaultAccount) return <CircularProgress />;
 
   useEffect(() => {
     try {
