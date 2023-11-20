@@ -10,30 +10,27 @@ import { metamaskPaymentInstruction } from "../public";
 import NewsRow from "../components/SystemInterface/NewsRow";
 import axios from "axios";
 import ImportTokenButton from "../components/ImportTokenButton";
+import { getCourseEth } from "../lib/getCourseEth";
 
 function Exchange() {
-  const { tokenContract, defaultAccount, signer } = UseFullContext();
+  const { tokenContract, defaultAccount, signer, tokenSymbol } =
+    UseFullContext();
   const [balanceToken, setBalanceToken] = useState(null);
   const [tokenDepositAmount, setTokenDepositAmount] = useState();
   // const [tnfTransferAmount, setTransferTnfAmount] = useState();
   // const [tnfAddressTo, setTnfAddressTo] = useState();
-  const [tnfWithdrawalAmount, setTnfWithdrawalAmount] = useState();
+  const [tokenWithdrawalAmount, setTokenWithdrawalAmount] = useState();
   const [manualFetchBalance, setManualFetchBalance] = useState(false);
   const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState(null);
 
   useEffect(() => {
-    try {
-      const ws = new w3cwebsocket(
-        "wss://stream.binance.com:9443/ws/ethusdt@trade"
-      );
-      ws.onmessage = ({ data }) => {
-        const course = Number(JSON.parse(data).p);
-        const balanceInUsd = balanceToken * course;
-        if (balanceInUsd > 0) setCurrentBalanceInUsd(balanceInUsd.toFixed(2));
-      };
-    } catch (error) {
-      console.log("Error while getting course: ", error.message);
-    }
+    const getCourse = async () => {
+      const course = await getCourseEth();
+      const balanceInUsd = balanceToken * course;
+      if (!isNaN(balanceInUsd)) setCurrentBalanceInUsd(balanceInUsd.toFixed(2));
+    };
+
+    getCourse();
   }, [balanceToken]);
 
   useEffect(() => {
@@ -66,7 +63,7 @@ function Exchange() {
   //     await tx.wait();
 
   //     toast.success(
-  //       `Transaction successful: ${tnfTransferAmount} TNF sent to ${getShortAccount(
+  //       `Transaction successful: ${tnfTransferAmount} ${tokenSymbol} sent to ${getShortAccount(
   //         tnfAddressTo
   //       )}`
   //     );
@@ -83,6 +80,7 @@ function Exchange() {
   const buyTokenForEth = async () => {
     try {
       const amount = ethers.utils.parseEther(tokenDepositAmount);
+
       const tx = await tokenContract.connect(signer).deposit({
         value: amount,
         gasLimit: 70000,
@@ -95,6 +93,7 @@ function Exchange() {
           tx,
           defaultAccount,
           status: "pending",
+          type: "deposit",
         });
       } catch (error) {
         console.log({ error });
@@ -106,7 +105,7 @@ function Exchange() {
       await tx.wait();
 
       toast.success(`Transaction successful: 
-      bought ${tokenDepositAmount} TNF `);
+      bought ${tokenDepositAmount} ${tokenSymbol} `);
 
       setTokenDepositAmount("");
       setManualFetchBalance(true);
@@ -117,6 +116,7 @@ function Exchange() {
         tx,
         defaultAccount,
         status: "successful",
+        type: "deposit",
       });
     } catch (error) {
       toast.error(`Error while deposit token: ${error.message}`);
@@ -126,8 +126,35 @@ function Exchange() {
 
   const sellTokenForEth = async () => {
     try {
-      const amount = ethers.utils.parseEther(tnfWithdrawalAmount);
+      const amount = ethers.utils.parseEther(tokenWithdrawalAmount);
+
+      const minWithdrawalBig = await tokenContract
+        .connect(signer)
+        .checkMinWithdrawal();
+
+      const minWithdrawal = parseInt(
+        String(ethers.BigNumber.from(minWithdrawalBig))
+      );
+
+      if (minWithdrawal > amount) {
+        toast.error("MINIMUM WITHDRAWAL " + minWithdrawal);
+        return;
+      }
+
       const tx = await tokenContract.connect(signer).withdrawUserETH(amount);
+
+      try {
+        await axios.post("/api/pay", {
+          tokenWithdrawalAmount,
+          amount,
+          tx,
+          defaultAccount,
+          status: "pending",
+          type: "sell",
+        });
+      } catch (error) {
+        console.log({ error });
+      }
 
       toast.warn(`Transaction pending... Hash:${tx.hash}`, {
         autoClose: 10000,
@@ -135,10 +162,23 @@ function Exchange() {
       await tx.wait();
 
       toast.success(`Transaction successful: 
-      sell ${tnfWithdrawalAmount} TNF `);
+      sell ${tokenWithdrawalAmount} ${tokenSymbol} `);
 
-      setTnfWithdrawalAmount("");
+      setTokenWithdrawalAmount("");
       setManualFetchBalance(true);
+
+      try {
+        await axios.post("/api/pay", {
+          tokenWithdrawalAmount,
+          amount,
+          tx,
+          defaultAccount,
+          status: "successful",
+          type: "sell",
+        });
+      } catch (error) {
+        console.log({ error });
+      }
     } catch (error) {
       toast.error(`Error while deposit token: ${error.message}`);
       console.log({ error });
@@ -177,7 +217,8 @@ function Exchange() {
               💰 Your bot balance :
             </div>
             <div className="font-bold text-emerald-100 flex">
-              {balanceToken} &nbsp;<div className="text-purple-600">TNF</div>
+              {balanceToken} &nbsp;
+              <div className="text-purple-600">{tokenSymbol}</div>
             </div>
             <div className="my-2 text-emerald-100 flex justify-center items-center">
               {currentBalanceInUsd
@@ -253,7 +294,7 @@ function Exchange() {
                 id="withdrawal_amount"
                 placeholder="0.01"
                 isNumbersOnly
-                onChange={(e) => setTnfWithdrawalAmount(e.target.value)}
+                onChange={(e) => setTokenWithdrawalAmount(e.target.value)}
               />
             </div>
             <button

@@ -12,19 +12,26 @@ export const CountDownTimer = ({
   className = "",
   finishText = "Time finished",
 }) => {
-  const [[h, m, s], setTime] = React.useState([hours, minutes, seconds]);
+  const [[d, h, m, s], setTime] = React.useState([
+    days,
+    hours,
+    minutes,
+    seconds,
+  ]);
   const { defaultAccount } = UseFullContext();
   const [finished, setFinished] = useState(false);
 
   const tick = () => {
-    if (h === 0 && m === 0 && s === 0) {
+    if (d === 0 && h === 0 && m === 0 && s === 0) {
       setFinished(true);
+    } else if (h === 0 && m === 0 && s === 0) {
+      setTime([d - 1, 23, 59, 59]);
     } else if (m === 0 && s === 0) {
-      setTime([h - 1, 59, 59]);
+      setTime([d, h - 1, 59, 59]);
     } else if (s == 0) {
-      setTime([h, m - 1, 59]);
+      setTime([d, h, m - 1, 59]);
     } else {
-      setTime([h, m, s - 1]);
+      setTime([d, h, m, s - 1]);
     }
   };
 
@@ -39,20 +46,26 @@ export const CountDownTimer = ({
         <div>
           {finished
             ? finishText
-            : `~ ${h.toString().padStart(2, "0")} h : ${m
+            : `~${d === 0 ? "" : d + " d"}  ${h
                 .toString()
-                .padStart(2, "0")}
+                .padStart(2, "0")} h : ${m.toString().padStart(2, "0")}
           m : ${s.toString().padStart(2, "0")} s`}
         </div>
       ) : (
         <div
           className={
-            "bg-gray-900 text-white rounded-md flex flex-col items-center justify-between shadow-xl p-4 my-2 h-[50%]" +
+            "bg-gray-900 text-white rounded-md flex flex-col items-center justify-between shadow-xl py-4 my-2 h-[50%]" +
             className
           }
         >
           <label className="mb-1 block">{text}</label>
-          <div className="flex items-center justify-center text-white w-full md:w-[60%] h-full">
+          <div className="flex items-center justify-center text-white w-full lg:w-[60%] h-full">
+            <input
+              className="text-gray-900 h-full w-full text-4xl font-semibold text-center px-1 mx-2 border rounded-md"
+              type="text"
+              value={`${d} d`}
+              readOnly
+            />
             <input
               className="text-gray-900 h-full w-full text-4xl font-semibold text-center px-1 mx-2 border rounded-md"
               type="text"

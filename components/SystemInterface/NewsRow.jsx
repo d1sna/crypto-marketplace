@@ -1,24 +1,37 @@
 import { useEffect, useState } from "react";
+import UseFullContext from "../../lib/useFullContext";
+import { getShortAccount } from "../../lib/getShortAccount";
 
-function getRandomElement(array) {
-  const randomIndex = Math.floor(Math.random() * array.length);
-  return array[randomIndex];
+function generateRandomEthAddress() {
+  const characters = "0123456789abcdef";
+  let address = "0x";
+
+  for (let i = 0; i < 40; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    address += characters[randomIndex];
+  }
+
+  return address;
+}
+
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 export default function NewsRow({ className }) {
-  const news = [
-    "🔥 0x83d...d33 get results 5100$ (+120.23 %)",
-    "🔥 0x83d...d38 get results 23141$ (+181.3 %)",
-    "🔥 0x83d...d33 get results 5100$ (+204.32 %)",
-  ];
-  const [currentNews, setCurrentNews] = useState(
-    "🔥 0x83d...d33 get results 5100$ (+120.23 %)"
-  );
+  const { tokenSymbol } = UseFullContext();
+  const [randomAcc, setRandomAcc] = useState("");
+  const [randomResult, setRandomResult] = useState("");
 
   useEffect(() => {
     setInterval(() => {
-      const randomNews = getRandomElement(news);
-      setCurrentNews(randomNews);
+      const generatedResult = `${getRandomNumber(
+        1000,
+        10000
+      )}$ (+${getRandomNumber(60, 250)}.${getRandomNumber(10, 99)} %)`;
+
+      setRandomAcc(getShortAccount(generateRandomEthAddress()));
+      setRandomResult(generatedResult);
     }, 5000);
   }, []);
 
@@ -32,9 +45,13 @@ export default function NewsRow({ className }) {
       <div className="flex flex-col sm:flex-row justify-center items-center">
         📢 ACTIVITY :&nbsp;
       </div>
-      <div className="text-emerald-500 flex flex-col sm:flex-row justify-center items-center">
-        {currentNews ? currentNews : " "}
-      </div>
+      {!!randomResult && (
+        <div className="flex flex-col sm:flex-row justify-center items-center">
+          🔥&nbsp;<div className="text-emerald-500">{randomAcc}</div>&nbsp;get
+          result&nbsp;
+          <div className="text-emerald-500">{randomResult}</div>
+        </div>
+      )}
       <div className="hidden sm:flex flex-col sm:flex-row justify-center items-center">
         &nbsp; | &nbsp;
       </div>
@@ -42,10 +59,10 @@ export default function NewsRow({ className }) {
         📈 DAYS TO LISTING TOKEN F&nbsp;
       </div>
       <div className=" text-purple-600 flex flex-col sm:flex-row justify-center items-center">
-        [TNF]
+        [{tokenSymbol}]
       </div>
       <div className="text-red-600 flex flex-col sm:flex-row justify-center items-center">
-        &nbsp;1d ↓ 🔥
+        &nbsp;14d ↓ 🔥
       </div>
     </div>
   );

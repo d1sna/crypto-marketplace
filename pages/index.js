@@ -17,7 +17,7 @@ import { CountDownTimer } from "../components/CountDownTimer";
 import getTimeUntilNextDate from "../lib/getTimeUntilNextDate";
 
 export default function Index() {
-  const { defaultAccount } = UseFullContext();
+  const { defaultAccount, tokenSymbol } = UseFullContext();
   const [rendered, setRendered] = useState(false);
 
   const { hours, minutes, seconds } = getTimeUntilNextDate();
@@ -87,10 +87,11 @@ export default function Index() {
       </div>
 
       <CountDownTimer
+        days={14}
         hours={hours}
         minutes={minutes}
         seconds={seconds}
-        text="🔥 Time to listing (Binance, Bybit) Token F 🔥"
+        text={`🔥 Time to listing ${tokenSymbol} (Binance, Bybit)  🔥`}
         className="mt-2"
       />
 

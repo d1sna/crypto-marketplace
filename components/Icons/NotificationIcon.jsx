@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function NotificationIcon(props) {
-  console.log(props.className);
   return (
     <>
       <svg

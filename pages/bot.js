@@ -12,9 +12,7 @@ import { TailwindSelect } from "../components/SystemInterface/TailwindSelect";
 import { toast } from "react-toastify";
 import { uuid } from "uuidv4";
 import axios from "axios";
-
-// TODO: change
-const course = 2015;
+import { getCourseEth } from "../lib/getCourseEth";
 
 function formatTimeUntil(timestamp) {
   const now = Math.floor(Date.now() / 1000); // Текущее время в Unix timestamp
@@ -29,7 +27,12 @@ function formatTimeUntil(timestamp) {
   const m = Math.floor((timeDifference % (60 * 60)) / 60);
   const s = timeDifference % 60;
 
-  return { d, h, m, s };
+  return {
+    d,
+    h,
+    m,
+    s,
+  };
 }
 
 const timeValues = [
@@ -82,8 +85,11 @@ const strategyValues = [
 ];
 
 function BotPage() {
+  const { tokenContract, defaultAccount, signer, tokenSymbol } =
+    UseFullContext();
+
+  const [course, setCourse] = useState();
   const [pair, setPair] = useState("btcusdt");
-  const { tokenContract, defaultAccount, signer } = UseFullContext();
   const [manualFetchBalance, setManualFetchBalance] = useState(false);
   const [balanceToken, setBalanceToken] = useState(null);
 
@@ -116,7 +122,7 @@ function BotPage() {
 
       const tx = await tokenContract
         .connect(signer)
-        .addBotTime(botId, finishTime);
+        .addBotTime(botId, finishTime, { gasLimit: 70000 });
 
       try {
         await axios.post("/api/save-bot", {
@@ -199,7 +205,6 @@ function BotPage() {
             .post("/api/get-bots", { botIds })
             .then(({ data }) => data);
 
-          console.log({ bots });
           parsedBots = bots.map((bot) => {
             const botId = bot.botId;
             const botTime = botMap.get(botId);
@@ -219,11 +224,15 @@ function BotPage() {
           });
         } catch (error) {}
 
-        console.log({ parsedBots });
         setAllCurrentBots(parsedBots.reverse().slice(0, 5));
       } catch (e) {
         console.log("ERROR WHILE GETTING BOTS", e.message);
       }
+    };
+
+    const getCourse = async () => {
+      const res = await getCourseEth();
+      if (!isNaN(Number(res))) setCourse(Number(res).toFixed(2));
     };
 
     if (tokenContract) {
@@ -231,6 +240,8 @@ function BotPage() {
       getAllBots();
     }
     setManualFetchBalance(false);
+
+    getCourse();
   }, [defaultAccount, tokenContract, manualFetchBalance]);
 
   return (
@@ -276,7 +287,9 @@ function BotPage() {
               return (
                 <BotResultRow
                   pair={bot.botPair}
-                  entirePrice={`~ ${bot.botStartedValue * course} $`}
+                  entirePrice={`~ ${(bot.botStartedValue * course).toFixed(
+                    2
+                  )} $`}
                   goalPrice={`~ ${(bot.botAwaitingResult * course).toFixed(
                     2
                   )} $`}
@@ -324,8 +337,9 @@ function BotPage() {
               💰 Current bot balance:{" "}
             </div>
             <div className=" font-bold text-emerald-300 mr-4 flex self-end rounded-md bg-gray-800 p-1">
-              {balanceToken} <div className="text-purple-500"> &nbsp; TNF</div>
-              <div>&nbsp; (~ {balanceToken * course}&nbsp;$)</div>
+              {balanceToken}{" "}
+              <div className="text-purple-500"> &nbsp; {tokenSymbol}</div>
+              <div>&nbsp; (~ {(balanceToken * course).toFixed(2)}&nbsp;$)</div>
             </div>
           </div>
 
@@ -373,7 +387,7 @@ function BotPage() {
                 }}
               />
               <TailwindInput
-                label={"YOUR BET [TNF]"}
+                label={`YOUR BET [${tokenSymbol}]`}
                 isNumbersOnly
                 value={tokenValue}
                 className={"w-[80%]"}

@@ -35,7 +35,7 @@ function MetamaskInstallButton() {
   if (!isWalletInstalled)
     return (
       <a target="_blank" href="https://metamask.io/download/" rel="noreferrer">
-        <div className="hover:bg-red-400 bg-indigo-200 my-2 rounded-xl">
+        <div className="hover:bg-red-400 bg-indigo-200 my-2 p-1 rounded-xl">
           <Image
             alt=""
             style={{
@@ -53,7 +53,7 @@ function MetamaskInstallButton() {
   if (!loggedIn)
     return (
       <div
-        className="hover:bg-red-400 bg-indigo-200"
+        className="hover:bg-red-400 bg-indigo-200 my-2 p-1 rounded-xl"
         onClick={startConnectMetamask}
       >
         <Image

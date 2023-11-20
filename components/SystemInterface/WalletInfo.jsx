@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-import { w3cwebsocket } from "websocket";
-
 import UseFullContext from "../../lib/useFullContext";
 import { getShortAccount } from "../../lib/getShortAccount";
+import { getCourseEth } from "../../lib/getCourseEth";
 
 export default function WalletInfo({ full, className }) {
   const context = UseFullContext();
@@ -14,19 +13,12 @@ export default function WalletInfo({ full, className }) {
   const [course, setCourse] = useState("⌛ ...waiting course");
 
   useEffect(() => {
-    try {
-      const ws = new w3cwebsocket(
-        "wss://stream.binance.com:9443/ws/ethusdt@trade"
-      );
-      ws.onmessage = ({ data }) => {
-        const course = Number(JSON.parse(data).p);
-        const balanceInUsd = currentBalance * course;
-        setCurrentBalanceInUsd(String(balanceInUsd).split(".")[0]);
-        setCourse(course);
-      };
-    } catch (error) {
-      console.log("Error while getting course: ", error.message);
-    }
+    const getCourse = async () => {
+      const res = await getCourseEth();
+      setCourse(res);
+    };
+
+    getCourse();
   });
 
   if (full)
@@ -45,7 +37,7 @@ export default function WalletInfo({ full, className }) {
         </div>
 
         <b className="mt-1 border-b border-gray-800">Current course ETH:</b>
-        <div> {course} USDT</div>
+        <div> {course} USD</div>
       </div>
     );
 

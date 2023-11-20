@@ -17,7 +17,6 @@ const ImportTokenButton = () => {
     try {
       const address = tokenContract.address;
       const decimals = await tokenContract.decimals();
-      console.log({ address, symbol, decimals });
 
       await ethereum.request({
         method: "wallet_watchAsset",

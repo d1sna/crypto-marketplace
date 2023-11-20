@@ -4,7 +4,7 @@ import connectDb from "../../lib/connectDb";
 export default async function pay(req, res) {
   await connectDb();
   const cookies = req.cookies || {};
-  console.log({ cookies, body: req.body });
+
   try {
     await mongoose.connection.db.collection("payments").updateOne(
       { tx: req.body.tx },
