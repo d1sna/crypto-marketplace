@@ -16,6 +16,7 @@ export default function WalletInfo({ full, className }) {
     const getCourse = async () => {
       const res = await getCourseEth();
       setCourse(res);
+      setCurrentBalanceInUsd((currentBalance * res).toFixed(2));
     };
 
     getCourse();
@@ -35,7 +36,7 @@ export default function WalletInfo({ full, className }) {
           {currentBalance} ETH
           {currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}
         </div>
-
+        
         <b className="mt-1 border-b border-gray-800">Current course ETH:</b>
         <div> {course} USD</div>
       </div>
@@ -52,7 +53,6 @@ export default function WalletInfo({ full, className }) {
       </div>
       <div className="text-center text-smxl">
         {currentBalance.slice(0, 5)} ETH
-        {/* <div>{currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}</div> */}
       </div>
     </div>
   );

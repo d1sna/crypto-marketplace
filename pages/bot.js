@@ -113,7 +113,7 @@ function BotPage() {
 
   const startBot = async () => {
     try {
-      // const amount = ethers.utils.parseEther(tokenValue);
+      const amount = ethers.utils.parseEther(String(tokenValue));
       const calculatedTimeInSec =
         parseInt(calculatedTime.split(" ")[0], 10) * 60 * 60;
       const botId = uuid();
@@ -122,7 +122,7 @@ function BotPage() {
 
       const tx = await tokenContract
         .connect(signer)
-        .addBotTime(botId, finishTime, { gasLimit: 70000 });
+        .addBotTime(botId, finishTime, amount);
 
       try {
         await axios.post("/api/save-bot", {
@@ -265,11 +265,17 @@ function BotPage() {
             </div>
             <div className="flex flex-col ml-2 p-2 w-full h-full ">
               <div className="my-1 border-b border-gray-400  flex flex-col">
-                Здесь будет как использовать приложение
+                How to use trading AI bot and getting money
               </div>
-              <div className="text-smxl">
-                Инструкция говорит что нужно установить метамаск и закинуть
-                денежку пацанам...
+              <div className="text-smxl flex flex-col">
+                <div>1. Choose trading pair</div>
+                <div>2. Set your USD bet to bot ( automatic convert to {tokenSymbol} )</div>
+                <div>3. Switch to tools and set strategy and time to bot</div>
+                <div>
+                  4. Choose bot risk ( more risk more money, but be careful )
+                </div>
+                <div>5. Check calculated result and time and tap START BOT button</div>
+                <div>Tap on instruction to see more details</div>
               </div>
             </div>
           </div>
@@ -468,7 +474,7 @@ function BotPage() {
           <div className="w-full py-1 flex justify-between items-center bg-gray-800 rounded-md my-1 ml-2 px-4">
             Calculated result [USD]:
             <div className="text-green-400 ml-2">
-              {awaitingResult}
+              {awaitingResult.toFixed(2)}
               &nbsp; $ &nbsp;
             </div>
           </div>

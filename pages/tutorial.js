@@ -1,5 +1,5 @@
-import Tutorial from "../public/tutorial/Tutorial";
+import TutorialInstallMetamask from "../components/TutorialInstallMetamask";
 
 export default function TutorialPage() {
-  return <Tutorial />;
+  return <TutorialInstallMetamask />;
 }

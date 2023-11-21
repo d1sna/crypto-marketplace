@@ -93,8 +93,8 @@ export const CountDownTimer = ({
             className="mt-4 rounded-md p-2 bg-purple-600"
           >
             {defaultAccount
-              ? "Start trading with AI for free"
-              : "Install metamask and start trading with AI for free"}
+              ? "Start trading with AI for free now"
+              : "Install metamask and start trading with AI for free now"}
           </Link>
         </div>
       )}

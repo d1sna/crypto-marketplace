@@ -17,8 +17,13 @@ import connectMetamaskTutorial from "./tutorial/connect.gif";
 import depTutorial from "./tutorial/dep.jpg";
 import metamaskTutorial from "./tutorial/metamaskfox.png";
 import tutorial2 from "./tutorial/tutorial2.gif";
-import testReview from "./reviews/test-review.png";
+
 import cyberEye from "./cyber_eye.jpeg";
+
+import review1 from "./reviews/review-1.png";
+import review2 from "./reviews/review-2.png";
+import review3 from "./reviews/review-3.png";
+import review4 from "./reviews/review-4.png";
 
 export {
   metaMaskLogo,
@@ -39,6 +44,9 @@ export {
   depTutorial,
   metamaskTutorial,
   tutorial2,
-  testReview,
   cyberEye,
+  review1,
+  review2,
+  review3,
+  review4,
 };

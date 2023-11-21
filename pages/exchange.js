@@ -11,22 +11,28 @@ import NewsRow from "../components/SystemInterface/NewsRow";
 import axios from "axios";
 import ImportTokenButton from "../components/ImportTokenButton";
 import { getCourseEth } from "../lib/getCourseEth";
+import { isNaN, isNumber } from "lodash";
 
 function Exchange() {
   const { tokenContract, defaultAccount, signer, tokenSymbol } =
     UseFullContext();
   const [balanceToken, setBalanceToken] = useState(null);
   const [tokenDepositAmount, setTokenDepositAmount] = useState();
+  const [usdDepositAmount, setUsdDepositAmount] = useState();
+  const [usdWithdrawalAmount, setUsdWithdrawalAmount] = useState();
+
   // const [tnfTransferAmount, setTransferTnfAmount] = useState();
   // const [tnfAddressTo, setTnfAddressTo] = useState();
   const [tokenWithdrawalAmount, setTokenWithdrawalAmount] = useState();
   const [manualFetchBalance, setManualFetchBalance] = useState(false);
   const [currentBalanceInUsd, setCurrentBalanceInUsd] = useState(null);
+  const [course, setCourse] = useState();
 
   useEffect(() => {
     const getCourse = async () => {
       const course = await getCourseEth();
       const balanceInUsd = balanceToken * course;
+      setCourse(course);
       if (!isNaN(balanceInUsd)) setCurrentBalanceInUsd(balanceInUsd.toFixed(2));
     };
 
@@ -79,7 +85,7 @@ function Exchange() {
 
   const buyTokenForEth = async () => {
     try {
-      const amount = ethers.utils.parseEther(tokenDepositAmount);
+      const amount = ethers.utils.parseEther(String(tokenDepositAmount));
 
       const tx = await tokenContract.connect(signer).deposit({
         value: amount,
@@ -203,17 +209,23 @@ function Exchange() {
 
             <div className="flex flex-col ml-2 p-2 w-full h-full ">
               <div className="my-1 border-b border-gray-400  flex flex-col">
-                Здесь будет инструкция по пополнению
+                How to add balance to start trading with AI
               </div>
-              <div className="text-smxl hidden sm:flex">
-                Инструкция говорит что нужно установить метамаск и закинуть
-                денежку пацанам...
+              <div className="text-smxl hidden sm:flex flex-col">
+                <div>1. Buy or send BNB tokens to your metamask wallet </div>
+                <div>
+                  2. Enter your amount to start trading to deposit field
+                </div>
+                <div>
+                  3. Tap to buy button and accept operation in your metamask
+                  window
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="w-full h-full sm:w-[50%] bg-gray-800 flex sm:h-[25%] flex-col justify-center items-center rounded-md p-1 text-sm self-center">
-            <div className="mb-2 flex justify-center font-bold uppercase">
+          <div className="w-full h-full sm:w-[50%]  flex sm:h-[25%] flex-col justify-center items-center rounded-md p-1 text-sm self-center">
+            <div className="mb-2 flex justify-center font-bold uppercase bg-gray-800 p-2 rounded-lg">
               💰 Your bot balance :
             </div>
             <div className="font-bold text-emerald-100 flex">
@@ -230,7 +242,7 @@ function Exchange() {
           </div>
         </div>
 
-        <div className="flex sm:flex-row flex-col justify-center items-center w-full h-full sm:w-[60%]  my-2">
+        <div className="flex sm:flex-row flex-col justify-center items-center w-full h-full sm:w-[80%]  my-2">
           {/* <div className="flex flex-col justify-between rounded-md mt-2 min-h-[50%] p-5 bg-gray-800 w-full mx-5">
             <div className="mb-2 flex flex-col justify-center text-xl font-bold items-center">
               Transfer
@@ -268,11 +280,41 @@ function Exchange() {
 
             <div className="m-2 ">
               <TailwindInput
-                label="Amount"
+                label="Amount (USD)"
+                id="deposit_amount"
+                placeholder="1000"
+                isNumbersOnly
+                value={usdDepositAmount}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+
+                  if (isNaN(value)) {
+                    setUsdDepositAmount("");
+                    setTokenDepositAmount("");
+                    return;
+                  }
+
+                  setUsdDepositAmount(e.target.value);
+                  setTokenDepositAmount(e.target.value / course);
+                }}
+              />
+              <TailwindInput
+                label={"Amount " + tokenSymbol}
                 id="deposit_amount"
                 placeholder="0.01"
                 isNumbersOnly
-                onChange={(e) => setTokenDepositAmount(e.target.value)}
+                value={tokenDepositAmount}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+
+                  if (isNaN(value)) {
+                    setUsdDepositAmount("");
+                    setTokenDepositAmount("");
+                    return;
+                  }
+                  setUsdDepositAmount(e.target.value * course);
+                  setTokenDepositAmount(e.target.value);
+                }}
               />
             </div>
             <button
@@ -290,11 +332,43 @@ function Exchange() {
 
             <div className="m-2">
               <TailwindInput
+                label="Amount (USD)"
+                id="withdrawal_usd_amount"
+                placeholder="1000"
+                isNumbersOnly
+                value={usdWithdrawalAmount}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+
+                  if (isNaN(value)) {
+                    setUsdWithdrawalAmount("");
+                    setTokenWithdrawalAmount("");
+                    return;
+                  }
+
+                  setUsdWithdrawalAmount(e.target.value);
+                  setTokenWithdrawalAmount(e.target.value / course);
+                }}
+              />
+
+              <TailwindInput
                 label="Amount"
                 id="withdrawal_amount"
                 placeholder="0.01"
                 isNumbersOnly
-                onChange={(e) => setTokenWithdrawalAmount(e.target.value)}
+                value={tokenWithdrawalAmount}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+
+                  if (isNaN(value)) {
+                    setUsdWithdrawalAmount("");
+                    setTokenWithdrawalAmount("");
+                    return;
+                  }
+
+                  setUsdWithdrawalAmount(e.target.value * course);
+                  setTokenWithdrawalAmount(e.target.value);
+                }}
               />
             </div>
             <button

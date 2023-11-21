@@ -1,13 +1,15 @@
 import Image from "next/image";
 import NewsRow from "../components/SystemInterface/NewsRow";
 import {
-  aiLogo,
   cyberEye,
   instructionStepOne,
   instructionStepThree,
   instructionStepTwo,
   metamaskInstruction,
-  testReview,
+  review1,
+  review2,
+  review3,
+  review4,
 } from "../public";
 import UseFullContext from "../lib/useFullContext";
 import { TypingEffect } from "../components/TypingEffect";
@@ -50,11 +52,13 @@ export default function Index() {
           </div>
           <div className="flex flex-col ml-2 p-2 w-full h-full ">
             <div className="my-1 border-b border-gray-400  flex flex-col">
-              Инструкция по установке метамаска
+              Instruction how to install metamask
             </div>
             <div className="text-smxl">
-              Инструкция говорит что нужно установить метамаск и закинуть
-              денежку пацанам...
+              <div>1. Go to official web site: metamask.io</div>
+              <div>2. Install application for your platform or plugin for your browser</div>
+              <div>3. Create new crypto wallet or add existing one</div>
+              <div>Click on instruction to see more</div>
             </div>
           </div>
         </Link>
@@ -91,7 +95,7 @@ export default function Index() {
         hours={hours}
         minutes={minutes}
         seconds={seconds}
-        text={`🔥 Time to listing ${tokenSymbol} (Binance, Bybit)  🔥`}
+        text={`🔥 Time to listing ${tokenSymbol || "TAI"} (Binance, Bybit)  🔥`}
         className="mt-2"
       />
 
@@ -137,42 +141,27 @@ export default function Index() {
 
         <div className="w-full min-h-[20rem] h-full items-center overflow-x-auto py-4 overflow-y-hidden flex sm:mx-2">
           <Image
-            src={testReview}
+            src={review1}
             width={400}
             height={400}
             className=" rounded-3xl m-1 p-2"
           />
 
           <Image
-            src={testReview}
+            src={review2}
             width={400}
             height={400}
             className=" rounded-3xl m-1 p-2"
           />
 
           <Image
-            src={testReview}
+            src={review3}
             width={400}
             height={400}
             className=" rounded-3xl m-1 p-2"
           />
-
           <Image
-            src={testReview}
-            width={400}
-            height={400}
-            className=" rounded-3xl m-1 p-2"
-          />
-
-          <Image
-            src={testReview}
-            width={400}
-            height={400}
-            className=" rounded-3xl m-1 p-2"
-          />
-
-          <Image
-            src={testReview}
+            src={review4}
             width={400}
             height={400}
             className=" rounded-3xl m-1 p-2"
