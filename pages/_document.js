@@ -15,6 +15,10 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Play&display=swap"
           rel="stylesheet"
         />
+        <link rel="icon" href="/favicon.png" sizes="<generated>" />
+
+        <meta name="apple-itunes-app" content="app-id=1438144202"></meta>
+        <meta name="google-play-app" content="app-id=io.metamask"></meta>
       </Head>
       <body>
         <Main />

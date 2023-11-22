@@ -25,18 +25,17 @@ export default function Navbar() {
 
   return (
     <nav className="flex flex-row justify-between items-center w-full z-50 py-1 text-white border-b border-gray-800">
-      <div className="flex">
+      <div className="flex ml-1">
         <Link
           href="/"
-          className="flex justify-center items-center text-white-400 text-md sm:text-xl"
+          className="flex justify-center items-center text-white-400 text-xl"
         >
           <Image
             src={cyberEye}
             width={70}
             height={70}
-            className="rounded-full m-2 bg-black opacity-80"
+            className="rounded-full m-2 bg-black opacity-80 hidden sm:flex"
           />
-          {/* <Image src={aiLogo} height={40} width={40}/> */}
           <TypingEffect text={"TradingAI"} className={"min-w-full"} />
         </Link>
       </div>

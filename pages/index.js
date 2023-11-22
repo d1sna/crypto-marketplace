@@ -21,13 +21,22 @@ import getTimeUntilNextDate from "../lib/getTimeUntilNextDate";
 export default function Index() {
   const { defaultAccount, tokenSymbol } = UseFullContext();
   const [rendered, setRendered] = useState(false);
-
+  const [rendered2, setRendered2] = useState(false);
   const { hours, minutes, seconds } = getTimeUntilNextDate();
 
   useEffect(() => {
     const asyncTask = async () => {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       setRendered(true);
+    };
+
+    asyncTask();
+  }, []);
+
+  useEffect(() => {
+    const asyncTask = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 6000));
+      setRendered2(true);
     };
 
     asyncTask();
@@ -55,8 +64,14 @@ export default function Index() {
               Instruction how to install metamask
             </div>
             <div className="text-smxl">
-              <div>1. Go to official web site: metamask.io</div>
-              <div>2. Install application for your platform or plugin for your browser</div>
+              <div>
+                1. Go to official web site: metamask.io ( or tap button in right
+                top )
+              </div>
+              <div>
+                2. Install application for your platform or plugin for your
+                browser
+              </div>
               <div>3. Create new crypto wallet or add existing one</div>
               <div>Click on instruction to see more</div>
             </div>
@@ -71,8 +86,8 @@ export default function Index() {
         className="rounded-full m-2 w-[70%] sm:w-[30%] bg-black opacity-50 shadow-2xl"
       />
 
-      <div className="w-full h-full flex p-3 my-2 border-b border-gray-900 text-2xl">
-        <div className="flex flex-col w-full h-full justify-center items-center">
+      <div className="w-full h-full flex justify-center items-center p-3 my-2 border-b border-gray-900 text-2xl">
+        <div className="flex flex-col w-full h-full justify-center items-center min-h-20">
           <TypingEffect
             text={"First ever crypto trading AI."}
             className={
@@ -84,7 +99,16 @@ export default function Index() {
               className={
                 "bg-gray-650 rounded-md w-auto p-2 flex justify-center items-center"
               }
-              text={`Don't think about risks and begin getting money with crypto bot.`}
+              text={`Don't think about risks.`}
+            />
+          )}
+
+          {rendered2 && (
+            <TypingEffect
+              className={
+                "bg-gray-650 rounded-md w-auto p-2 flex justify-center items-center"
+              }
+              text={`Begin getting money.`}
             />
           )}
         </div>
@@ -95,16 +119,16 @@ export default function Index() {
         hours={hours}
         minutes={minutes}
         seconds={seconds}
-        text={`🔥 Time to listing ${tokenSymbol || "TAI"} (Binance, Bybit)  🔥`}
+        text={`🔥 Time to listing ${tokenSymbol || "TAI"} ( Binance, Bybit ) | Free using 🔥`}
         className="mt-2"
       />
 
       <div className="flex flex-col justify-center items-center h-full my-2 p-2 rounded-md ">
         <div className="flex w-full justify-center items-center h-full flex-col sm:flex-row">
           <div className="w-full h-full flex flex-col">
-            <div className="flex w-full shadow-lg bg-gray-800 p-2 my-2 rounded-lg h-full">
+            <div className="flex w-full flex-col justify-center items-center shadow-lg bg-gray-800 p-2 my-2 rounded-lg h-full">
               <Image src={instructionStepOne} width={200} height={120} />
-              <div className="mx-4 flex flex-col items-center justify-center">
+              <div className="m-4 flex flex-col items-center justify-center">
                 <h1 className="text-yellow-400 mb-2">
                   Dollar Cost Averaging Dollar
                 </h1>
@@ -113,18 +137,24 @@ export default function Index() {
                 potential bags by bringing down the weighted average price.
               </div>
             </div>
-            <div className="flex w-full shadow-lg bg-gray-800 p-2 my-2 rounded-lg h-full">
-              <Image src={instructionStepTwo} width={200} height={120} />
-              <div className="mx-4 flex flex-col items-center justify-center">
+            <div className="flex flex-col justify-center items-center row w-full shadow-lg bg-gray-800 p-2 my-2 rounded-lg h-full">
+              <Image
+                src={instructionStepTwo}
+                width={200}
+                height={120}
+                className="my-2"
+              />
+
+              <div className="m-4 flex flex-col items-center justify-center">
                 <h1 className="text-yellow-400 mb-2">Short selling</h1>
                 Short sell your currencies to mitigate a sudden drop. Track your
                 currencies to the bottom and only buy them back when they show
                 signs of recovery.
               </div>
             </div>
-            <div className="flex w-full shadow-lg bg-gray-800 p-2 my-2 rounded-lg h-full">
+            <div className="flex flex-col justify-center items-center w-full shadow-lg bg-gray-800 p-2 my-2 rounded-lg h-full">
               <Image src={instructionStepThree} width={200} height={120} />
-              <div className="mx-4 flex flex-col items-center justify-center">
+              <div className="m-4 flex flex-col items-center justify-center">
                 <h1 className="text-yellow-400 mb-2">Triggers</h1>
                 Respond to the rise and fall of currencies and make sure that
                 you respond to early signs of bear markets. Create customized

@@ -54,34 +54,34 @@ export const CountDownTimer = ({
       ) : (
         <div
           className={
-            "bg-gray-900 text-white rounded-md flex flex-col items-center justify-between shadow-xl py-4 my-2 h-[50%]" +
+            `rounded-md flex flex-col items-center justify-between shadow-xl py-4 my-2 h-[50%]` +
             className
           }
         >
           <label className="mb-1 block">{text}</label>
-          <div className="flex items-center justify-center text-white w-full lg:w-[60%] h-full">
+          <div className="flex items-center justify-center text-black w-full lg:w-[60%] m-2 h-full bg-gray-900 ">
             <input
-              className="text-gray-900 h-full w-full text-4xl font-semibold text-center px-1 mx-2 border rounded-md"
+              className="h-full bg-white w-full text-2xl sm:text-4xl font-semibold text-center px-1 mx-2 border border-gray-500 rounded-md "
               type="text"
               value={`${d} d`}
               readOnly
             />
             <input
-              className="text-gray-900 h-full w-full text-4xl font-semibold text-center px-1 mx-2 border rounded-md"
+              className="h-full bg-white w-full text-2xl sm:text-4xl font-semibold text-center px-1 mx-2 border border-gray-500 rounded-md"
               type="text"
               value={`${h.toString().padStart(2, "0")} h`}
               readOnly
             />
             :
             <input
-              className="text-gray-900 h-full w-full text-4xl font-semibold text-center px-1 mx-2 border rounded-md"
+              className="h-full bg-white w-full text-2xl sm:text-4xl font-semibold text-center px-1 mx-2 border border-gray-500 rounded-md"
               type="text"
               value={`${m.toString().padStart(2, "0")} m`}
               readOnly
             />
             :
             <input
-              className="text-gray-900 h-full w-full text-4xl font-semibold text-center px-1 mx-2 border rounded-md"
+              className="h-full bg-white w-full text-2xl sm:text-4xl font-semibold text-center px-1 mx-2 border border-gray-500 rounded-md"
               type="text"
               value={`${s.toString().padStart(2, "0")} s`}
               readOnly
@@ -92,9 +92,7 @@ export const CountDownTimer = ({
             href={defaultAccount ? "/exchange" : "/tutorial"}
             className="mt-4 rounded-md p-2 bg-purple-600"
           >
-            {defaultAccount
-              ? "Start trading with AI for free now"
-              : "Install metamask and start trading with AI for free now"}
+            Start trading with AI for free
           </Link>
         </div>
       )}

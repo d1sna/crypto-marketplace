@@ -265,16 +265,21 @@ function BotPage() {
             </div>
             <div className="flex flex-col ml-2 p-2 w-full h-full ">
               <div className="my-1 border-b border-gray-400  flex flex-col">
-                How to use trading AI bot and getting money
+                How to use trading AI bot
               </div>
               <div className="text-smxl flex flex-col">
                 <div>1. Choose trading pair</div>
-                <div>2. Set your USD bet to bot ( automatic convert to {tokenSymbol} )</div>
+                <div>
+                  2. Set your USD bet to bot ( automatic convert to{" "}
+                  {tokenSymbol} )
+                </div>
                 <div>3. Switch to tools and set strategy and time to bot</div>
                 <div>
                   4. Choose bot risk ( more risk more money, but be careful )
                 </div>
-                <div>5. Check calculated result and time and tap START BOT button</div>
+                <div>
+                  5. Check calculated result and time and tap START BOT button
+                </div>
                 <div>Tap on instruction to see more details</div>
               </div>
             </div>
@@ -351,21 +356,21 @@ function BotPage() {
 
           <div className="flex w-full justify-center items-center border border-gray-900 m-1 rounded-md">
             <div
-              className={`flex items-center justify-center w-full border-r rounded-l-md ${
+              className={`flex items-center justify-center w-full border-r rounded-l-md my-1 ${
                 field === "trade" ? "bg-gray-600" : "bg-gray-800"
               } cursor-pointer`}
               onClick={() => setField("trade")}
             >
-              <span class="semi-bold usn">Trade</span>
+              <span className="semi-bold usn">Trade</span>
             </div>
 
             <div
-              className={`flex items-center justify-center w-full ${
+              className={`flex items-center justify-center w-full my-1 ${
                 field === "tools" ? "bg-gray-600" : "bg-gray-800"
               }  cursor-pointer rounded-r-md`}
               onClick={() => setField("tools")}
             >
-              <span class="semi-bold usn">Tools</span>
+              <span className="semi-bold usn">Tools</span>
             </div>
           </div>
 
@@ -434,7 +439,6 @@ function BotPage() {
                   75%
                 </div>
                 <div
-                  c
                   className={`w-full rounded-r-md border-r px-2 cursor-pointer ${
                     percentageRisk === 1 && "bg-orange-600"
                   }`}

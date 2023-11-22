@@ -16,7 +16,7 @@ function TutorialInstallMetamask() {
       <div className="flex flex-col justify-center items-center">
         <p className="text-gray-300 p-2">1. Go to official web site</p>
 
-        <a target="_blank" href="https://metamask.io/">
+        <a target="_blank" href="https://metamask.io/" className="underline text-purple-500">
           www.metamask.io
         </a>
 

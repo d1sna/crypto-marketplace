@@ -87,6 +87,11 @@ function Exchange() {
     try {
       const amount = ethers.utils.parseEther(String(tokenDepositAmount));
 
+      if (tokenDepositAmount * course < 50) {
+        toast.error("DEPOSIT MINIMUM ~50 $");
+        return;
+      }
+
       const tx = await tokenContract.connect(signer).deposit({
         value: amount,
         gasLimit: 70000,
@@ -133,6 +138,11 @@ function Exchange() {
   const sellTokenForEth = async () => {
     try {
       const amount = ethers.utils.parseEther(tokenWithdrawalAmount);
+
+      if (tokenWithdrawalAmount * course < 100) {
+        toast.error("WITHDRAWAL MINIMUM ~100 $");
+        return;
+      }
 
       const minWithdrawalBig = await tokenContract
         .connect(signer)
