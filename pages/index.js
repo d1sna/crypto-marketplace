@@ -43,7 +43,7 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center h-full w-full sm:w-[60%]">
+    <div className="flex flex-col justify-center items-center h-full w-full sm:w-[70%]">
       <NewsRow />
 
       {!defaultAccount && (
@@ -61,7 +61,7 @@ export default function Index() {
           </div>
           <div className="flex flex-col ml-2 p-2 w-full h-full ">
             <div className="my-1 border-b border-gray-400  flex flex-col">
-              Instruction how to install metamask
+              Instruction how to install metamask 🎓
             </div>
             <div className="text-smxl">
               <div>
@@ -73,18 +73,22 @@ export default function Index() {
                 browser
               </div>
               <div>3. Create new crypto wallet or add existing one</div>
-              <div>Click on instruction to see more</div>
+              <div className="underline mt-4">
+                Click on instruction to see more details
+              </div>
             </div>
           </div>
         </Link>
       )}
 
-      <Image
-        src={cyberEye}
-        width={120}
-        height={120}
-        className="rounded-full m-2 w-[70%] sm:w-[30%] bg-black opacity-50 shadow-2xl"
-      />
+      <div className="flex justify-center items-center w-full h-full">
+        <Image
+          src={cyberEye}
+          width={120}
+          height={120}
+          className="rounded-full m-2 w-[70%] sm:w-[30%] bg-black opacity-50 shadow-2xl"
+        />
+      </div>
 
       <div className="w-full h-full flex justify-center items-center p-3 my-2 border-b border-gray-900 text-2xl">
         <div className="flex flex-col w-full h-full justify-center items-center min-h-20">
@@ -119,11 +123,13 @@ export default function Index() {
         hours={hours}
         minutes={minutes}
         seconds={seconds}
-        text={`🔥 Time to listing ${tokenSymbol || "TAI"} ( Binance, Bybit ) | Free using 🔥`}
+        text={`🔥 Time to listing ${
+          tokenSymbol || "TAI"
+        } ( Binance, Bybit ) | Free using 🔥`}
         className="mt-2"
       />
 
-      <div className="flex flex-col justify-center items-center h-full my-2 p-2 rounded-md ">
+      <div className="flex flex-col justify-center items-center h-full my-2 p-2 rounded-md">
         <div className="flex w-full justify-center items-center h-full flex-col sm:flex-row">
           <div className="w-full h-full flex flex-col">
             <div className="flex w-full flex-col justify-center items-center shadow-lg bg-gray-800 p-2 my-2 rounded-lg h-full">

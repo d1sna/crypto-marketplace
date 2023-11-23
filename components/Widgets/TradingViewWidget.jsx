@@ -46,7 +46,7 @@ const TradingViewWidget = ({ pair }) => {
           hide_legend: true,
           save_image: false,
           container_id: "tradingview_d7a37",
-          hide_top_toolbar: true,
+          // hide_top_toolbar: true,
           // hide_volume: true,
           // allow_symbol_change: true,
           // width: "600px",e

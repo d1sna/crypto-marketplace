@@ -12,7 +12,7 @@ import Head from "next/head";
 
 function App({ Component, pageProps }) {
   return (
-    <div className="flex flex-col justify-center items-center w-full h-full min-h-screen  text-white px-4 sm:px-10">
+    <div className="w-full h-full min-h-screen flex flex-col justify-between items-center text-white px-4 sm:px-10">
       <Head>
         <title>TradingAI</title>
       </Head>

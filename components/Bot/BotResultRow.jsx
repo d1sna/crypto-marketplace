@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import { CountDownTimer } from "../CountDownTimer";
-
-function getRandomNumberWithDecimal(min, max, prev) {
-  if (min >= max) {
-    throw new Error("Минимальное значение должно быть меньше максимального");
-  }
-
-  const randomNumber = (Math.random() * (max - min) + min + prev).toFixed(2);
-  return parseFloat(randomNumber);
-}
+import axios from "axios";
+import { getRandomNumberWithDecimal } from "../../lib/getRandomNumberWithDecimal";
 
 export default function BotResultRow({
+  id,
   pair,
   entirePrice,
   goalPrice,
@@ -21,8 +15,18 @@ export default function BotResultRow({
   const [currentResult, setCurrentResult] = useState(currentResultValue);
 
   useEffect(() => {
-    setInterval(() => {
-      setCurrentResult((prev) => getRandomNumberWithDecimal(-0.05, 0.1, prev));
+    setInterval(async () => {
+      const { data } = await axios.post("/api/get-bots", { botIds: [id] });
+      const bot = data[0];
+
+      setCurrentResult((prev) => {
+        const random = getRandomNumberWithDecimal(
+          -0.01,
+          0.03,
+          bot.currentResult
+        );
+        return random < 100 ? random : prev;
+      });
     }, 3000);
   }, []);
 
@@ -38,19 +42,20 @@ export default function BotResultRow({
         {goalPrice}
       </div>
       <div
-        className={`mr-2 px-2 justify-center bg-green-400 items-center flex rounded-md w-[20%] ${
-          status === "done" && "bg-orange-400"
+        className={`mr-2 px-2 justify-center text-green-400 items-center flex rounded-md w-[20%] ${
+          status === "done" && "text-orange-400"
         }`}
       >
         {status}
       </div>
-      <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[30%] text-yellow-300">
+      <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[50%] text-yellow-300">
         <CountDownTimer
           days={remainingTime.d}
           hours={remainingTime.h}
           minutes={remainingTime.m}
           seconds={remainingTime.s}
           simple
+          className="min-w-full"
         />
       </div>
       <div
@@ -79,7 +84,7 @@ export const BotResultColumns = () => {
       <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[20%] ">
         <div className="mr-2">STATUS:</div>
       </div>
-      <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[30%] ">
+      <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[50%] ">
         TIME:
       </div>
       <div className="mr-2 px-2 justify-center items-center flex rounded-md w-[20%] ">

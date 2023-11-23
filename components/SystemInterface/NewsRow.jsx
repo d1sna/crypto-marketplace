@@ -18,10 +18,13 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+let startAcc;
+let startResult;
+
 export default function NewsRow({ className }) {
   const { tokenSymbol } = UseFullContext();
-  const [randomAcc, setRandomAcc] = useState("");
-  const [randomResult, setRandomResult] = useState("");
+  const [randomAcc, setRandomAcc] = useState(startAcc);
+  const [randomResult, setRandomResult] = useState(startResult);
 
   useEffect(() => {
     setInterval(() => {
@@ -30,7 +33,11 @@ export default function NewsRow({ className }) {
         10000
       )}$ (+${getRandomNumber(60, 250)}.${getRandomNumber(10, 99)} %)`;
 
-      setRandomAcc(getShortAccount(generateRandomEthAddress()));
+      const randomAcc = getShortAccount(generateRandomEthAddress());
+      startAcc = randomAcc;
+      startResult = generatedResult;
+
+      setRandomAcc(randomAcc);
       setRandomResult(generatedResult);
     }, 5000);
   }, []);
@@ -56,10 +63,10 @@ export default function NewsRow({ className }) {
         &nbsp; | &nbsp;
       </div>
       <div className="flex flex-col sm:flex-row justify-center items-center">
-        📈 DAYS TO LISTING TOKEN F&nbsp;
+        📈 DAYS TO LISTING TOKEN TRADING AI&nbsp;
       </div>
       <div className=" text-purple-600 flex flex-col sm:flex-row justify-center items-center">
-        [{tokenSymbol}]
+        [{tokenSymbol || "TAI"}]
       </div>
       <div className="text-red-600 flex flex-col sm:flex-row justify-center items-center">
         &nbsp;14d ↓ 🔥

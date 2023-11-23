@@ -11,6 +11,7 @@ export const CountDownTimer = ({
   simple = false,
   className = "",
   finishText = "Time finished",
+  intervalTime = 1000,
 }) => {
   const [[d, h, m, s], setTime] = React.useState([
     days,
@@ -36,7 +37,7 @@ export const CountDownTimer = ({
   };
 
   React.useEffect(() => {
-    const timerID = setInterval(() => tick(), 1000);
+    const timerID = setInterval(() => tick(), intervalTime);
     return () => clearInterval(timerID);
   });
 
@@ -48,8 +49,7 @@ export const CountDownTimer = ({
             ? finishText
             : `~${d === 0 ? "" : d + " d"}  ${h
                 .toString()
-                .padStart(2, "0")} h : ${m.toString().padStart(2, "0")}
-          m : ${s.toString().padStart(2, "0")} s`}
+                .padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`}
         </div>
       ) : (
         <div

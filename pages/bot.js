@@ -6,13 +6,14 @@ import NewsRow from "../components/SystemInterface/NewsRow";
 import UseFullContext from "../lib/useFullContext";
 import { ethers } from "ethers";
 import WithConnectedWallet from "../components/SystemInterface/WithConnectedWallet";
-import { mainPageLogo } from "../public";
+import { graphicsTradingImage } from "../public";
 import Image from "next/image";
 import { TailwindSelect } from "../components/SystemInterface/TailwindSelect";
 import { toast } from "react-toastify";
 import { uuid } from "uuidv4";
 import axios from "axios";
 import { getCourseEth } from "../lib/getCourseEth";
+import Link from "next/link";
 
 function formatTimeUntil(timestamp) {
   const now = Math.floor(Date.now() / 1000); // Текущее время в Unix timestamp
@@ -245,7 +246,7 @@ function BotPage() {
   }, [defaultAccount, tokenContract, manualFetchBalance]);
 
   return (
-    <div className="flex flex-col w-full sm:max-w-[80%] min-h-screen">
+    <div className="flex flex-col sm:max-w-[80%] sm:min-w-[80%] min-h-screen">
       <NewsRow />
 
       <div className="p-1 h-full flex flex-col sm:flex-row sm:justify-between">
@@ -254,18 +255,21 @@ function BotPage() {
             <TradingViewWidget pair={pair} />
           </div>
 
-          <div className="w-full bg-gray-900 rounded-md flex justify-between items-center my-2 cursor-pointer">
+          <Link
+            href={"/tutorial-bot"}
+            className="w-full bg-gray-900 rounded-md flex justify-between items-center my-2 cursor-pointer"
+          >
             <div>
               <Image
                 width={250}
                 height={150}
                 className="rounded-xl"
-                src={mainPageLogo}
+                src={graphicsTradingImage}
               />
             </div>
             <div className="flex flex-col ml-2 p-2 w-full h-full ">
               <div className="my-1 border-b border-gray-400  flex flex-col">
-                How to use trading AI bot
+                How to use trading AI bot 🎓
               </div>
               <div className="text-smxl flex flex-col">
                 <div>1. Choose trading pair</div>
@@ -280,40 +284,42 @@ function BotPage() {
                 <div>
                   5. Check calculated result and time and tap START BOT button
                 </div>
-                <div>Tap on instruction to see more details</div>
+                <div>6. Wait time while bot is increasing money</div>
+                <div className="mt-4 underline">
+                  Tap on instruction to see more details
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
 
-          <div className="flex flex-col rounded-md w-full h-full mt-2 text-smxl border border-gray-900 bg-gray-900 p-2">
+          <div className="flex flex-col  justify-center items-center rounded-md w-full min-h-min mt-2 text-smxl border border-gray-900 bg-gray-900 p-2">
             <div className="flex justify-center items-center border-b border-gray-900">
               🤖 YOUR BOTS:
             </div>
             <BotResultColumns />
-            {allCurrentBots.map((bot) => {
-              console.log({
-                bot: new Date(bot.time * 1000),
-                now: new Date(Date.now()),
-              });
-              return (
-                <BotResultRow
-                  pair={bot.botPair}
-                  entirePrice={`~ ${(bot.botStartedValue * course).toFixed(
-                    2
-                  )} $`}
-                  goalPrice={`~ ${(bot.botAwaitingResult * course).toFixed(
-                    2
-                  )} $`}
-                  status={
-                    new Date(Date.now()) >= new Date(bot.botTime * 1000)
-                      ? "done"
-                      : "in progress"
-                  }
-                  remainingTime={formatTimeUntil(bot.botTime)}
-                  currentResultValue={bot.botCurrentResult}
-                />
-              );
-            })}
+
+            {allCurrentBots.map((bot) => (
+              <BotResultRow
+                id={bot.botId}
+                pair={bot.botPair}
+                entirePrice={`~ ${(bot.botStartedValue * course).toFixed(2)} $`}
+                goalPrice={`~ ${(bot.botAwaitingResult * course).toFixed(2)} $`}
+                status={bot.status || "working"}
+                remainingTime={formatTimeUntil(bot.botTime)}
+                currentResultValue={bot.botCurrentResult}
+              />
+            ))}
+
+            <div
+              className={`uppercase p-2 rounded-md text-white w-[40%] m-2 flex justify-center items-center ${
+                !allCurrentBots.length
+                  ? "bg-gray-400"
+                  : "bg-green-600 cursor-pointer"
+              }`}
+              onClick={async () => {}}
+            >
+              Show all
+            </div>
           </div>
         </div>
 
@@ -350,7 +356,7 @@ function BotPage() {
             <div className=" font-bold text-emerald-300 mr-4 flex self-end rounded-md bg-gray-800 p-1">
               {balanceToken}{" "}
               <div className="text-purple-500"> &nbsp; {tokenSymbol}</div>
-              <div>&nbsp; (~ {(balanceToken * course).toFixed(2)}&nbsp;$)</div>
+              <div>&nbsp; ~ {(balanceToken * course).toFixed(2)}&nbsp;$</div>
             </div>
           </div>
 
@@ -377,7 +383,7 @@ function BotPage() {
           {field === "trade" && (
             <div className="flex flex-col w-full h-full justify-center items-center">
               <TailwindInput
-                label={"YOUR BET [USD]"}
+                label={"YOUR BET USD"}
                 value={valueUsd}
                 className={"w-[80%]"}
                 isNumbersOnly
@@ -398,7 +404,7 @@ function BotPage() {
                 }}
               />
               <TailwindInput
-                label={`YOUR BET [${tokenSymbol}]`}
+                label={`YOUR BET ${tokenSymbol}`}
                 isNumbersOnly
                 value={tokenValue}
                 className={"w-[80%]"}
