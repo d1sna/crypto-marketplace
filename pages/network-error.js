@@ -6,11 +6,12 @@ import Image from "next/image";
 import { bnbSwitchTutorial } from "../public";
 
 export default function NetworkErrorPage() {
-  const { defaultAccount } = UseFullContext();
+  const { defaultAccount, signer } = UseFullContext();
   const router = useRouter();
 
   useEffect(() => {
-    if (defaultAccount) router.push("/");
+    if (defaultAccount && signer?.provider._network?.name == "bnb")
+      router.push("/");
   }, [defaultAccount]);
 
   return (
@@ -18,9 +19,9 @@ export default function NetworkErrorPage() {
       <h1 className="w-full h-full flex justify-center items-center text-3xl">
         Please choose BNB network in your metamask
       </h1>
-      <Image src={bnbSwitchTutorial} />
-      <div>Or tap button below</div>
-      <SwitchChainButton />
+      <Image src={bnbSwitchTutorial} className="mb-4" />
+      <div className="my-4">Or tap button</div>
+      <SwitchChainButton className="my-2" />
     </div>
   );
 }
