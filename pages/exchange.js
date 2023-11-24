@@ -94,10 +94,10 @@ function Exchange() {
     try {
       const amount = ethers.utils.parseEther(String(tokenDepositAmount));
 
-      if (tokenDepositAmount * course < 50) {
-        toast.error("DEPOSIT MINIMUM ~50 $");
-        return;
-      }
+      // if (tokenDepositAmount * course < 50) {
+      //   toast.error("DEPOSIT MINIMUM ~50 $");
+      //   return;
+      // }
 
       const tx = await tokenContract.connect(signer).deposit({
         value: amount,

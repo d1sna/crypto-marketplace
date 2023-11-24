@@ -17,12 +17,25 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CountDownTimer } from "../components/CountDownTimer";
 import getTimeUntilNextDate from "../lib/getTimeUntilNextDate";
+import axios from "axios";
 
 export default function Index() {
   const { defaultAccount, tokenSymbol } = UseFullContext();
   const [rendered, setRendered] = useState(false);
   const [rendered2, setRendered2] = useState(false);
   const { hours, minutes, seconds } = getTimeUntilNextDate();
+
+  useEffect(() => {
+    const createVisitor = async () => {
+      try {
+        await axios.post("/api/visit");
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+
+    if (!defaultAccount) createVisitor();
+  }, [defaultAccount]);
 
   useEffect(() => {
     const asyncTask = async () => {
