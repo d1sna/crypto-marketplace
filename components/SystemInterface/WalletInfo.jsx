@@ -33,11 +33,11 @@ export default function WalletInfo({ full, className }) {
 
         <b className="mt-1 border-b border-gray-800">Balance:</b>
         <div>
-          {currentBalance} ETH
+          {currentBalance} BNB
           {currentBalanceInUsd && ` / ~$${currentBalanceInUsd}`}
         </div>
-        
-        <b className="mt-1 border-b border-gray-800">Current course ETH:</b>
+
+        <b className="mt-1 border-b border-gray-800">Current course BNB:</b>
         <div> {course} USD</div>
       </div>
     );
@@ -52,7 +52,7 @@ export default function WalletInfo({ full, className }) {
         {getShortAccount(defaultAccount)}
       </div>
       <div className="text-center text-smxl">
-        {currentBalance.slice(0, 5)} ETH
+        {currentBalance.slice(0, 5)} BNB
       </div>
     </div>
   );
